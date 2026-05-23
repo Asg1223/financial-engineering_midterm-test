@@ -1,21 +1,13 @@
+# 金融工学 完全版 インタラクティブ授業資料（解説付き）
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>金融工学 完全版システム</title>
-
-<!-- ========================================= -->
-<!-- Chart.js -->
-<!-- ========================================= -->
+<title>金融工学 解説付きシステム</title>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<!-- ========================================= -->
-<!-- MathJax -->
-<!-- ========================================= -->
 
 <script>
 window.MathJax = {
@@ -30,81 +22,72 @@ window.MathJax = {
 <style>
 
 body{
-
     margin:0;
     font-family:"Yu Gothic",sans-serif;
     background:#f4f7fb;
     color:#222;
-
+    line-height:1.8;
 }
 
 header{
-
     background:linear-gradient(135deg,#003366,#0055aa);
     color:white;
     text-align:center;
     padding:50px;
-
 }
 
 h1{
-
     margin:0;
     font-size:48px;
-
 }
 
 .container{
-
     width:95%;
     max-width:1400px;
     margin:auto;
     padding:30px 0;
-
 }
 
 section{
-
     background:white;
     padding:35px;
     border-radius:18px;
     margin-bottom:40px;
     box-shadow:0 4px 12px rgba(0,0,0,0.1);
-
 }
 
 h2{
-
     color:#003366;
     border-left:8px solid #0055aa;
     padding-left:15px;
-
 }
 
 .formula{
-
     background:#eef5ff;
     border-left:5px solid #3399ff;
     padding:15px;
     margin:20px 0;
     font-size:18px;
+}
 
+.explanation{
+    background:#fff8dc;
+    border-left:5px solid orange;
+    padding:15px;
+    margin-top:15px;
 }
 
 input, textarea{
-
     width:100%;
-    padding:12px;
-    border-radius:8px;
-    border:1px solid #aaa;
+    padding:10px;
     margin-top:5px;
     margin-bottom:15px;
+    border-radius:8px;
+    border:1px solid #aaa;
     font-size:16px;
-
 }
 
 button{
-
     padding:12px 20px;
     border:none;
     border-radius:10px;
@@ -112,496 +95,337 @@ button{
     color:white;
     font-size:16px;
     cursor:pointer;
-
 }
 
 button:hover{
-
     background:#003366;
-
 }
 
 .result{
-
     background:#eef5ff;
     border-left:5px solid #3399ff;
     padding:15px;
     margin-top:20px;
     font-size:18px;
-
 }
 
 canvas{
-
     margin-top:30px;
     background:white;
     border:1px solid #ddd;
     border-radius:12px;
     padding:10px;
-
-}
-
-table{
-
-    width:100%;
-    border-collapse:collapse;
-    margin-top:20px;
-
-}
-
-th, td{
-
-    border:1px solid #ccc;
-    padding:10px;
-    text-align:center;
-
-}
-
-th{
-
-    background:#dceeff;
-
-}
-
-footer{
-
-    background:#003366;
-    color:white;
-    text-align:center;
-    padding:25px;
-
 }
 
 </style>
-
 </head>
-
 <body>
 
 <header>
-
-<h1>金融工学 完全版システム</h1>
-
-<p>
-利息計算・リスク分析・ポートフォリオ理論・Efficient Frontier
-</p>
-
+<h1>金融工学 解説付き授業資料</h1>
+<p>途中式・解説・自動計算対応</p>
 </header>
 
 <div class="container">
 
-<!-- ===================================================== -->
+<!-- ================================================= -->
 <!-- 利息計算 -->
-<!-- ===================================================== -->
+<!-- ================================================= -->
 
 <section>
 
 <h2>1. 利息計算</h2>
 
 <div class="formula">
-
 \[
 A = P(1+r)^n
 \]
-
 </div>
 
-<label>借入金額（円）</label>
-<input type="number" id="loanAmount" value="3000000">
+<div class="explanation">
+<h3>解き方</h3>
 
-<label>年利率（%）</label>
-<input type="number" id="interestRate" value="2">
+① 年利率を小数へ変換する。<br>
+例：5% → 0.05<br><br>
 
-<label>返済年数</label>
-<input type="number" id="loanYears" value="35">
+② 公式
+\( A = P(1+r)^n \)
+へ代入する。<br><br>
 
-<button onclick="calculateLoans()">
-計算
-</button>
+③ 将来価値 A を求める。<br><br>
 
-<div class="result" id="loanResult">
-結果が表示されます
+④ 利息 = A - P を計算する。
 </div>
 
-<canvas id="loanChart"></canvas>
+<label>元本 P</label>
+<input type="number" id="principal" value="100000">
+
+<label>年利率 (%)</label>
+<input type="number" id="rate" value="5">
+
+<label>年数 n</label>
+<input type="number" id="years" value="10">
+
+<button onclick="calculateInterest()">計算</button>
+
+<div class="result" id="interestResult"></div>
 
 </section>
 
-<!-- ===================================================== -->
+<!-- ================================================= -->
 <!-- リスクとリターン -->
-<!-- ===================================================== -->
+<!-- ================================================= -->
 
 <section>
 
 <h2>2. リターンとリスク</h2>
 
 <div class="formula">
-
 \[
 R = \frac{P_1 - P_0}{P_0}
 \]
-
 </div>
 
-<textarea id="returnsInput"
-rows="5">10,5,-3,8,12</textarea>
-
-<button onclick="calculateRiskReturn()">
-計算
-</button>
-
-<div class="result"
-id="riskResult">
-結果が表示されます
+<div class="formula">
+\[
+\sigma = \sqrt{\frac{1}{n}\sum (x_i - \bar{x})^2}
+\]
 </div>
+
+<div class="explanation">
+<h3>解き方</h3>
+
+① データの平均値を求める。<br>
+
+② 各データから平均値を引く。<br>
+
+③ 2乗して合計する。<br>
+
+④ データ数で割る。<br>
+
+⑤ 最後に平方根を取る。<br>
+→ 標準偏差（リスク）
+</div>
+
+<label>収益率データ（カンマ区切り）</label>
+<textarea id="returnsInput" rows="5">10,5,-3,8,12</textarea>
+
+<button onclick="calculateRiskReturn()">計算</button>
+
+<div class="result" id="riskResult"></div>
 
 <canvas id="riskChart"></canvas>
 
 </section>
 
-<!-- ===================================================== -->
-<!-- CSV -->
-<!-- ===================================================== -->
-
-<section>
-
-<h2>3. CSV株価分析</h2>
-
-<input type="file"
-id="stockCSV"
-accept=".csv">
-
-<button onclick="analyzeCSV()">
-CSV解析
-</button>
-
-<div class="result"
-id="csvResult">
-結果が表示されます
-</div>
-
-<canvas id="stockChart"></canvas>
-
-</section>
-
-<!-- ===================================================== -->
+<!-- ================================================= -->
 <!-- 期待値 -->
-<!-- ===================================================== -->
+<!-- ================================================= -->
 
 <section>
 
-<h2>4. 期待値と標準偏差</h2>
+<h2>3. 期待値と標準偏差</h2>
 
 <div class="formula">
-
 \[
 E(R)=\sum p_iR_i
 \]
+</div>
 
+<div class="explanation">
+<h3>解き方</h3>
+
+① 「確率 × 収益率」をすべて計算する。<br>
+
+② 全部足すと期待値になる。<br><br>
+
+③
+\(
+(R_i - E(R))^2
+\)
+を計算する。<br><br>
+
+④ 確率を掛けて合計する。<br>
+
+⑤ 平方根を取ると標準偏差。
 </div>
 
 <label>確率</label>
-<input type="text"
-id="probabilities"
-value="0.3,0.4,0.3">
+<input type="text" id="probabilities" value="0.3,0.4,0.3">
 
 <label>収益率</label>
-<input type="text"
-id="returns"
-value="-10,5,20">
+<input type="text" id="returns" value="-10,5,20">
 
-<button onclick="calculateExpectedValue()">
-計算
-</button>
+<button onclick="calculateExpectedValue()">計算</button>
 
-<div class="result"
-id="expectedResult">
-結果が表示されます
-</div>
+<div class="result" id="expectedResult"></div>
 
 </section>
 
-<!-- ===================================================== -->
+<!-- ================================================= -->
 <!-- ポートフォリオ -->
-<!-- ===================================================== -->
+<!-- ================================================= -->
 
 <section>
 
-<h2>5. ポートフォリオ理論</h2>
+<h2>4. ポートフォリオ理論</h2>
 
 <div class="formula">
-
 \[
 \mu_W = a\mu_X + (1-a)\mu_Y
 \]
-
 </div>
 
 <div class="formula">
-
 \[
-\sigma_W^2
-=
-a^2\sigma_X^2
+\sigma_W^2 =
+ a^2\sigma_X^2
 +
 (1-a)^2\sigma_Y^2
 +
 2a(1-a)\rho\sigma_X\sigma_Y
 \]
+</div>
 
+<div class="explanation">
+<h3>資料通りの解き方</h3>
+
+① 投資比率を確認する。<br>
+
+② 期待値の式へ代入する。<br>
+
+③ 分散公式へ代入する。<br>
+
+④ 分散の平方根を取る。<br>
+→ ポートフォリオのリスク
 </div>
 
 <label>投資比率 a</label>
-<input type="number"
-id="a"
-step="0.01"
-value="0.6">
+<input type="number" id="a" step="0.01" value="0.6">
 
 <label>μX</label>
-<input type="number"
-id="muX"
-value="12">
+<input type="number" id="muX" value="12">
 
 <label>μY</label>
-<input type="number"
-id="muY"
-value="5">
+<input type="number" id="muY" value="5">
 
 <label>σX</label>
-<input type="number"
-id="sigmaX"
-value="20">
+<input type="number" id="sigmaX" value="20">
 
 <label>σY</label>
-<input type="number"
-id="sigmaY"
-value="10">
+<input type="number" id="sigmaY" value="10">
 
 <label>ρXY</label>
-<input type="number"
-id="rho"
-step="0.01"
-value="0.3">
+<input type="number" id="rho" step="0.01" value="0.3">
 
-<button onclick="calculatePortfolio()">
-計算
-</button>
+<button onclick="calculatePortfolio()">計算</button>
 
-<div class="result"
-id="portfolioResult">
-結果が表示されます
-</div>
+<div class="result" id="portfolioResult"></div>
 
 <canvas id="portfolioChart"></canvas>
 
 </section>
 
-<!-- ===================================================== -->
+<!-- ================================================= -->
 <!-- Efficient Frontier -->
-<!-- ===================================================== -->
+<!-- ================================================= -->
 
 <section>
 
-<h2>6. Efficient Frontier</h2>
+<h2>5. Efficient Frontier</h2>
 
-<p>
-効率的フロンティアを描画します
-</p>
+<div class="explanation">
+<h3>解き方</h3>
 
-<button onclick="drawFrontier()">
-描画
-</button>
+① 投資比率 a を0〜1まで変化させる。<br>
+
+② 各 a について期待値とリスクを計算する。<br>
+
+③ 横軸に Risk、縦軸に Return を取る。<br>
+
+④ 曲線を描く。<br>
+→ Efficient Frontier
+</div>
+
+<button onclick="drawFrontier()">描画</button>
 
 <canvas id="frontierChart"></canvas>
 
 </section>
 
-<!-- ===================================================== -->
+<!-- ================================================= -->
 <!-- 最適化 -->
-<!-- ===================================================== -->
+<!-- ================================================= -->
 
 <section>
 
-<h2>7. ポートフォリオ最適化</h2>
+<h2>6. ポートフォリオ最適化</h2>
 
 <div class="formula">
-
 \[
 \max \mu_W(a)
 \]
-
 </div>
 
-<button onclick="optimizePortfolio()">
-最適化
-</button>
+<div class="explanation">
+<h3>解き方</h3>
 
-<div class="result"
-id="optimizationResult">
-結果が表示されます
+① 投資比率を少しずつ変化させる。<br>
+
+② 各比率の期待収益率を計算する。<br>
+
+③ 最大となる比率を探す。<br>
+
+④ 最適ポートフォリオを決定する。
 </div>
+
+<button onclick="optimizePortfolio()">最適化</button>
+
+<div class="result" id="optimizationResult"></div>
 
 </section>
 
 </div>
 
-<footer>
-
-金融工学 完全版システム
-
-</footer>
-
 <script>
 
-// =====================================================
-// 利息計算
-// =====================================================
+let riskChart = null;
+let portfolioChart = null;
+let frontierChart = null;
 
-let loanChart = null;
+function calculateInterest(){
 
-function calculateLoans(){
+    let P = parseFloat(document.getElementById("principal").value);
+    let r = parseFloat(document.getElementById("rate").value) / 100;
+    let n = parseFloat(document.getElementById("years").value);
 
-    let P =
-        parseFloat(
-            document.getElementById("loanAmount").value
-        );
+    let A = P * Math.pow(1+r,n);
 
-    let annualRate =
-        parseFloat(
-            document.getElementById("interestRate").value
-        ) / 100;
+    let interest = A - P;
 
-    let years =
-        parseFloat(
-            document.getElementById("loanYears").value
-        );
+    document.getElementById("interestResult").innerHTML =
 
-    let months =
-        years * 12;
-
-    let r =
-        annualRate / 12;
-
-    // 元利均等
-
-    let annuityMonthly =
-
-        P *
-        r *
-        Math.pow(1+r,months)
-
-        /
-
-        (
-            Math.pow(1+r,months)-1
-        );
-
-    let annuityTotal =
-        annuityMonthly * months;
-
-    // 元金均等
-
-    let principalPart =
-        P / months;
-
-    let remain = P;
-
-    let equalPrincipalTotal = 0;
-
-    for(let i=0;i<months;i++){
-
-        let payment =
-            principalPart +
-            remain * r;
-
-        equalPrincipalTotal += payment;
-
-        remain -= principalPart;
-
-    }
-
-    // 一括
-
-    let lumpSum =
-        P * Math.pow(1+annualRate,years);
-
-    document.getElementById("loanResult").innerHTML =
-
-        "<b>元利均等：</b>"
+        "<b>途中式</b><br>"
         +
-        annuityTotal.toFixed(0)
+        "A = " + P + " × (1 + " + r + ")^" + n
+        +
+        "<br><br>"
+        +
+        "<b>将来価値：</b>"
+        +
+        A.toFixed(2)
         +
         " 円"
-
         +
-
         "<br><br>"
-
         +
-
-        "<b>元金均等：</b>"
+        "<b>利息：</b>"
         +
-        equalPrincipalTotal.toFixed(0)
-        +
-        " 円"
-
-        +
-
-        "<br><br>"
-
-        +
-
-        "<b>一括返済：</b>"
-        +
-        lumpSum.toFixed(0)
+        interest.toFixed(2)
         +
         " 円";
 
-    const ctx =
-        document.getElementById("loanChart");
-
-    if(loanChart){
-
-        loanChart.destroy();
-
-    }
-
-    loanChart =
-        new Chart(ctx,{
-
-            type:'bar',
-
-            data:{
-
-                labels:[
-                    '元利均等',
-                    '元金均等',
-                    '一括'
-                ],
-
-                datasets:[{
-
-                    label:'総返済額',
-
-                    data:[
-                        annuityTotal,
-                        equalPrincipalTotal,
-                        lumpSum
-                    ]
-
-                }]
-
-            }
-
-        });
-
 }
-
-// =====================================================
-// リスクとリターン
-// =====================================================
-
-let riskChart = null;
 
 function calculateRiskReturn(){
 
@@ -611,8 +435,7 @@ function calculateRiskReturn(){
         .split(",")
         .map(Number);
 
-    let n =
-        values.length;
+    let n = values.length;
 
     let mean =
         values.reduce((a,b)=>a+b,0)/n;
@@ -624,195 +447,53 @@ function calculateRiskReturn(){
             0
         ) / n;
 
-    let sigma =
-        Math.sqrt(variance);
+    let sigma = Math.sqrt(variance);
 
     document.getElementById("riskResult").innerHTML =
 
-        "<b>期待収益率：</b>"
+        "<b>平均：</b>"
         +
         mean.toFixed(4)
-
         +
-
         "<br><br>"
-
         +
-
+        "<b>分散：</b>"
+        +
+        variance.toFixed(4)
+        +
+        "<br><br>"
+        +
         "<b>標準偏差：</b>"
         +
         sigma.toFixed(4);
 
-    const ctx =
-        document.getElementById("riskChart");
+    const ctx = document.getElementById("riskChart");
 
     if(riskChart){
-
         riskChart.destroy();
-
     }
 
-    riskChart =
-        new Chart(ctx,{
+    riskChart = new Chart(ctx,{
 
-            type:'line',
+        type:'line',
 
-            data:{
+        data:{
 
-                labels:
-                    values.map((_,i)=>i+1),
+            labels: values.map((_,i)=>i+1),
 
-                datasets:[{
+            datasets:[{
 
-                    label:'収益率',
+                label:'収益率',
+                data:values,
+                tension:0.2
 
-                    data:values,
+            }]
 
-                    tension:0.2
+        }
 
-                }]
-
-            }
-
-        });
+    });
 
 }
-
-// =====================================================
-// CSV解析
-// =====================================================
-
-let stockChart = null;
-
-function analyzeCSV(){
-
-    let file =
-        document.getElementById("stockCSV").files[0];
-
-    if(!file){
-
-        alert("CSVを選択してください");
-        return;
-
-    }
-
-    let reader =
-        new FileReader();
-
-    reader.onload =
-        function(e){
-
-            let rows =
-                e.target.result.split("\n");
-
-            let prices = [];
-
-            rows.forEach(row=>{
-
-                let num =
-                    parseFloat(row);
-
-                if(!isNaN(num)){
-
-                    prices.push(num);
-
-                }
-
-            });
-
-            let returns = [];
-
-            for(let i=1;i<prices.length;i++){
-
-                returns.push(
-
-                    (
-                        prices[i]
-                        -
-                        prices[i-1]
-                    )
-                    /
-                    prices[i-1]
-
-                );
-
-            }
-
-            let mean =
-                returns.reduce((a,b)=>a+b,0)
-                /
-                returns.length;
-
-            let variance =
-                returns.reduce(
-                    (sum,x)=>
-                    sum + Math.pow(x-mean,2),
-                    0
-                )
-                /
-                returns.length;
-
-            let sigma =
-                Math.sqrt(variance);
-
-            document.getElementById("csvResult").innerHTML =
-
-                "<b>平均収益率：</b>"
-                +
-                mean.toFixed(6)
-
-                +
-
-                "<br><br>"
-
-                +
-
-                "<b>リスク：</b>"
-                +
-                sigma.toFixed(6);
-
-            const ctx =
-                document.getElementById("stockChart");
-
-            if(stockChart){
-
-                stockChart.destroy();
-
-            }
-
-            stockChart =
-                new Chart(ctx,{
-
-                    type:'line',
-
-                    data:{
-
-                        labels:
-                            prices.map((_,i)=>i+1),
-
-                        datasets:[{
-
-                            label:'株価',
-
-                            data:prices,
-
-                            tension:0.2
-
-                        }]
-
-                    }
-
-                });
-
-        };
-
-    reader.readAsText(file);
-
-}
-
-// =====================================================
-// 期待値
-// =====================================================
 
 function calculateExpectedValue(){
 
@@ -832,8 +513,7 @@ function calculateExpectedValue(){
 
     for(let i=0;i<probs.length;i++){
 
-        mean +=
-            probs[i] * returns[i];
+        mean += probs[i] * returns[i];
 
     }
 
@@ -842,183 +522,92 @@ function calculateExpectedValue(){
     for(let i=0;i<probs.length;i++){
 
         variance +=
-
             probs[i]
-
             *
-
-            Math.pow(
-                returns[i]-mean,
-                2
-            );
+            Math.pow(returns[i]-mean,2);
 
     }
 
-    let sigma =
-        Math.sqrt(variance);
+    let sigma = Math.sqrt(variance);
 
     document.getElementById("expectedResult").innerHTML =
 
         "<b>期待値：</b>"
         +
         mean.toFixed(4)
-
         +
-
         "<br><br>"
-
         +
-
         "<b>標準偏差：</b>"
         +
         sigma.toFixed(4);
 
 }
 
-// =====================================================
-// ポートフォリオ
-// =====================================================
-
-let portfolioChart = null;
-
 function calculatePortfolio(){
 
-    let a =
-        parseFloat(
-            document.getElementById("a").value
-        );
+    let a = parseFloat(document.getElementById("a").value);
+    let muX = parseFloat(document.getElementById("muX").value);
+    let muY = parseFloat(document.getElementById("muY").value);
+    let sigmaX = parseFloat(document.getElementById("sigmaX").value);
+    let sigmaY = parseFloat(document.getElementById("sigmaY").value);
+    let rho = parseFloat(document.getElementById("rho").value);
 
-    let muX =
-        parseFloat(
-            document.getElementById("muX").value
-        );
-
-    let muY =
-        parseFloat(
-            document.getElementById("muY").value
-        );
-
-    let sigmaX =
-        parseFloat(
-            document.getElementById("sigmaX").value
-        );
-
-    let sigmaY =
-        parseFloat(
-            document.getElementById("sigmaY").value
-        );
-
-    let rho =
-        parseFloat(
-            document.getElementById("rho").value
-        );
-
-    let mu =
-
-        a*muX
-        +
-        (1-a)*muY;
+    let mu = a*muX + (1-a)*muY;
 
     let variance =
 
         (a*a*sigmaX*sigmaX)
-
         +
-
         ((1-a)*(1-a)*sigmaY*sigmaY)
-
         +
-
         (
-            2 *
-            a *
-            (1-a) *
-            rho *
-            sigmaX *
-            sigmaY
+            2 * a * (1-a)
+            * rho * sigmaX * sigmaY
         );
 
-    let sigma =
-        Math.sqrt(variance);
+    let sigma = Math.sqrt(variance);
 
     document.getElementById("portfolioResult").innerHTML =
 
         "<b>期待収益率：</b>"
         +
         mu.toFixed(4)
-
         +
-
         "<br><br>"
-
         +
-
         "<b>リスク：</b>"
         +
         sigma.toFixed(4);
 
-    const ctx =
-        document.getElementById("portfolioChart");
+    const ctx = document.getElementById("portfolioChart");
 
     if(portfolioChart){
-
         portfolioChart.destroy();
-
     }
 
-    portfolioChart =
-        new Chart(ctx,{
+    portfolioChart = new Chart(ctx,{
 
-            type:'scatter',
+        type:'scatter',
 
-            data:{
+        data:{
 
-                datasets:[{
+            datasets:[{
 
-                    label:'Portfolio',
+                label:'Portfolio',
 
-                    data:[{
-
-                        x:sigma,
-                        y:mu
-
-                    }]
-
+                data:[{
+                    x:sigma,
+                    y:mu
                 }]
 
-            },
+            }]
 
-            options:{
+        }
 
-                scales:{
-
-                    x:{
-                        title:{
-                            display:true,
-                            text:'Risk'
-                        }
-                    },
-
-                    y:{
-                        title:{
-                            display:true,
-                            text:'Return'
-                        }
-                    }
-
-                }
-
-            }
-
-        });
+    });
 
 }
-
-// =====================================================
-// Efficient Frontier
-// =====================================================
-
-let frontierChart = null;
 
 function drawFrontier(){
 
@@ -1035,103 +624,54 @@ function drawFrontier(){
 
         let rho = 0.3;
 
-        let mu =
-            a*muX + (1-a)*muY;
+        let mu = a*muX + (1-a)*muY;
 
         let variance =
-
             (a*a*sigmaX*sigmaX)
-
             +
-
             ((1-a)*(1-a)*sigmaY*sigmaY)
-
             +
+            (2*a*(1-a)*rho*sigmaX*sigmaY);
 
-            (
-                2 *
-                a *
-                (1-a) *
-                rho *
-                sigmaX *
-                sigmaY
-            );
-
-        let sigma =
-            Math.sqrt(variance);
+        let sigma = Math.sqrt(variance);
 
         risks.push(sigma);
         returns.push(mu);
 
     }
 
-    const ctx =
-        document.getElementById("frontierChart");
+    const ctx = document.getElementById("frontierChart");
 
     if(frontierChart){
-
         frontierChart.destroy();
-
     }
 
-    frontierChart =
-        new Chart(ctx,{
+    frontierChart = new Chart(ctx,{
 
-            type:'scatter',
+        type:'scatter',
 
-            data:{
+        data:{
 
-                datasets:[{
+            datasets:[{
 
-                    label:'Efficient Frontier',
+                label:'Efficient Frontier',
 
-                    data:
-                        risks.map(
-
-                            (r,i)=>({
-
-                                x:r,
-                                y:returns[i]
-
-                            })
-
-                        ),
-
-                    showLine:true
-
-                }]
-
-            },
-
-            options:{
-
-                scales:{
-
-                    x:{
-                        title:{
-                            display:true,
-                            text:'Risk'
-                        }
-                    },
-
-                    y:{
-                        title:{
-                            display:true,
-                            text:'Return'
-                        }
+                data: risks.map((r,i)=>(
+                    {
+                        x:r,
+                        y:returns[i]
                     }
+                )),
 
-                }
+                showLine:true
 
-            }
+            }]
 
-        });
+        }
+
+    });
 
 }
-
-// =====================================================
-// 最適化
-// =====================================================
 
 function optimizePortfolio(){
 
@@ -1141,7 +681,9 @@ function optimizePortfolio(){
     for(let a=0;a<=1;a+=0.01){
 
         let mu =
-            a*0.12 + (1-a)*0.05;
+            a*0.12
+            +
+            (1-a)*0.05;
 
         if(mu > bestReturn){
 
@@ -1157,13 +699,9 @@ function optimizePortfolio(){
         "<b>最適投資比率：</b>"
         +
         bestA.toFixed(2)
-
         +
-
         "<br><br>"
-
         +
-
         "<b>最大期待収益率：</b>"
         +
         bestReturn.toFixed(4);
@@ -1174,3 +712,4 @@ function optimizePortfolio(){
 
 </body>
 </html>
+
