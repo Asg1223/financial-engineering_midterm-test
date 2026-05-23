@@ -2,16 +2,18 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>金融工学 計算自動化システム</title>
+    <title>金融工学 計算・シミュレーション自動化システム v2</title>
+    <!-- Chart.js を埋め込みで利用できるようにするため、CDNの代わりに静的に読み込めるようCanvas描画を自作するか、標準的なライブラリを利用します -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
             font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
             line-height: 1.6;
             color: #333;
-            max-width: 900px;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #f4f6f9;
+            background-color: #f0f4f8;
         }
         h1 {
             text-align: center;
@@ -49,7 +51,7 @@
         }
         label {
             display: inline-block;
-            width: 260px;
+            width: 280px;
             font-weight: bold;
             color: #4a5568;
         }
@@ -69,8 +71,9 @@
             border-radius: 4px;
             cursor: pointer;
             transition: background 0.2s;
-            display: block;
+            display: inline-block;
             margin-top: 15px;
+            margin-right: 10px;
         }
         button:hover {
             background-color: #2b6cb0;
@@ -94,6 +97,7 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 15px;
+            margin-bottom: 15px;
         }
         th, td {
             border: 1px solid #cbd5e0;
@@ -104,11 +108,26 @@
             background-color: #edf2f7;
             text-align: center;
         }
+        .flex-container {
+            display: block;
+        }
+        .chart-container {
+            position: relative;
+            margin: auto;
+            height: 400px;
+            width: 100%;
+            max-width: 600px;
+            background: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
 
-    <h1>金融工学 計算自動化システム</h1>
+    <h1>金融工学 計算・シミュレーション自動化システム v2</h1>
 
     <!-- 1. 単利・複利の計算 -->
     <div class="section">
@@ -137,13 +156,14 @@
         </div>
     </div>
 
-    <!-- 2. ローン返済方法の計算 -->
+    <!-- 2. ローン返済方法の計算（宿題No.2対応版） -->
     <div class="section">
-        <h2>2. ローン返済シミュレーション (第2回講義 宿題対応)</h2>
+        <h2>2. ローン返済シミュレーション (宿題No.2対応)</h2>
+        <p style="font-size:0.9rem; color:#666;">※宿題のデフォルト値：元金1000万円、年利5%、10年間返済</p>
         <div class="formula">
-            ① 一括返済: 毎年末に利息支払い、最終年に元金一括返済<br>
+            ① 一括返済: 毎年末に利息支払い、10年末に元金一括返済<br>
             ② 元金均等返済: 毎年の元金返済額 = 元金 ÷ T + 残高に対する利息<br>
-            ③ 元利均等返済額: Y = 元金 × [ r / (1 - (1 + r)<sup>-T</sup>) ]
+            ③ 元利均等返済: 毎年末に同じ金額を返済。Y = 元金 × [ r / (1 - (1 + r)<sup>-T</sup>) ]
         </div>
         <div class="input-group">
             <label for="calc2_principal">借入元金 (円):</label>
@@ -165,7 +185,7 @@
                 <thead>
                     <tr>
                         <th>返済方法</th>
-                        <th>毎年の返済（目安 / 初年度）</th>
+                        <th>毎年の返済額推移・目安</th>
                         <th>総利息額</th>
                         <th>総返済額</th>
                     </tr>
@@ -173,19 +193,19 @@
                 <tbody>
                     <tr>
                         <td>① 一括返済</td>
-                        <td id="res2_1_year"></td>
+                        <td id="res2_1_year" style="text-align:left;"></td>
                         <td id="res2_1_interest"></td>
                         <td id="res2_1_total"></td>
                     </tr>
                     <tr>
                         <td>② 元金均等返済</td>
-                        <td id="res2_2_year"></td>
+                        <td id="res2_2_year" style="text-align:left;"></td>
                         <td id="res2_2_interest"></td>
                         <td id="res2_2_total"></td>
                     </tr>
                     <tr>
                         <td>③ 元利均等返済</td>
-                        <td id="res2_3_year"></td>
+                        <td id="res2_3_year" style="text-align:left;"></td>
                         <td id="res2_3_interest"></td>
                         <td id="res2_3_total"></td>
                     </tr>
@@ -203,7 +223,7 @@
             標準偏差（リスク）: &sigma; = &radic;(&sigma;<sup>2</sup>)
         </div>
         
-        <p><strong>シナリオ入力（最大3つ）</strong></p>
+        <p><strong>シナリオ入力</strong></p>
         <table>
             <thead>
                 <tr>
@@ -239,48 +259,116 @@
         </div>
     </div>
 
-    <!-- 4. 2資産ポートフォリオのリターンとリスク -->
+    <!-- 4. 2資産ポートフォリオのリターンとリスク（宿題No.4対応版） -->
     <div class="section">
-        <h2>4. 2資産ポートフォリオのリターンとリスク (第4回講義 宿題対応)</h2>
+        <h2>4. 2資産ポートフォリオのリターンとリスク (宿題No.4対応)</h2>
+        <p style="font-size:0.9rem; color:#666;">※宿題のデフォルト値：X社（期待値10%, 標準偏差20%）、Y社（期待値30%, 標準偏差40%）</p>
         <div class="formula">
             ポートフォリオリターン: &mu;<sub>w</sub> = a × &mu;<sub>X</sub> + (1 - a) × &mu;<sub>Y</sub> <br>
-            ポートフォリオ分散: &sigma;<sub>w</sub><sup>2</sup> = a<sup>2</sup>&sigma;<sub>X</sub><sup>2</sup> + (1-a)<sup>2</sup>&sigma;<sub>Y</sub><sup>2</sup> + 2a(1-a)&rho;<sub>XY</sub>&sigma;<sub>X</sub>&sigma;<sub>Y</sub>
+            ポートフォリオ標準偏差: &sigma;<sub>w</sub> = &radic;[ a<sup>2</sup>&sigma;<sub>X</sub><sup>2</sup> + (1-a)<sup>2</sup>&sigma;<sub>Y</sub><sup>2</sup> + 2a(1-a)&rho;<sub>XY</sub>&sigma;<sub>X</sub>&sigma;<sub>Y</sub> ]
         </div>
         
         <div class="input-group">
             <label for="p_mux">資産X の期待収益率 &mu;<sub>X</sub> (%):</label>
-            <input type="number" id="p_mux" value="10" step="0.1">
+            <input type="number" id="p_mux" value="10">
         </div>
         <div class="input-group">
             <label for="p_sigmax">資産X の標準偏差 &sigma;<sub>X</sub> (%):</label>
-            <input type="number" id="p_sigmax" value="20" step="0.1">
+            <input type="number" id="p_sigmax" value="20">
         </div>
         <div class="input-group">
             <label for="p_muy">資産Y の期待収益率 &mu;<sub>Y</sub> (%):</label>
-            <input type="number" id="p_muy" value="5" step="0.1">
+            <input type="number" id="p_muy" value="30">
         </div>
         <div class="input-group">
             <label for="p_sigmay">資産Y の標準偏差 &sigma;<sub>Y</sub> (%):</label>
-            <input type="number" id="p_sigmay" value="15" step="0.1">
-        </div>
-        <div class="input-group">
-            <label for="p_rho">相関係数 &rho;<sub>XY</sub> (-1.0 ～ 1.0):</label>
-            <input type="number" id="p_rho" value="0.3" step="0.1" min="-1" max="1">
+            <input type="number" id="p_sigmay" value="40">
         </div>
         <div class="input-group">
             <label for="p_weight">資産X への投資比率 a (0.0 ～ 1.0):</label>
-            <input type="number" id="p_weight" value="0.5" step="0.05" min="0" max="1">
+            <input type="number" id="p_weight" value="0.5" step="0.1" min="0" max="1">
         </div>
-        <button onclick="calculatePortfolio()">ポートフォリオ評価</button>
+        
+        <p><strong>宿題問2〜4対応：異なる相関係数 &rho;<sub>XY</sub> での一括シミュレーション</strong></p>
+        <button onclick="calculatePortfolioNo4()">ポートフォリオ評価を実行</button>
 
         <div id="result4" class="result-box" style="display:none;">
-            <div class="result-item">ポートフォリオの期待収益率 (&mu;<sub>w</sub>): <span id="res4_return" class="result-value"></span> %</div>
-            <div class="result-item">ポートフォリオの分散 (&sigma;<sub>w</sub><sup>2</sup>): <span id="res4_variance" class="result-value"></span></div>
-            <div class="result-item">ポートフォリオの標準偏差 (リスク &sigma;<sub>w</sub>): <span id="res4_sd" class="result-value"></span> %</div>
+            <div class="result-item" style="margin-bottom:15px;">指定投資比率 (a = <span id="res4_current_a"></span>) の期待リターン: <span id="res4_return" class="result-value"></span> %</div>
+            <h4>各相関係数におけるリスク（標準偏差 &sigma;<sub>w</sub>）の結果一覧:</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>相関係数 &rho;</th>
+                        <th>ポートフォリオのリスク &sigma;<sub>w</sub></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>&rho; = 0 のとき (問2)</td>
+                        <td id="res4_rho_0" class="result-value" style="font-size:1.1rem;"></td>
+                    </tr>
+                    <tr>
+                        <td>&rho; = -1 のとき (問3)</td>
+                        <td id="res4_rho_minus1" class="result-value" style="font-size:1.1rem;"></td>
+                    </tr>
+                    <tr>
+                        <td>&rho; = 0.5 のとき (問4)</td>
+                        <td id="res4_rho_05" class="result-value" style="font-size:1.1rem;"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 5. 宿題No.5対応：最小リスク配分比率算出 ＆ 機会曲線自動描画 -->
+    <div class="section">
+        <h2>5. 最適ポートフォリオ選択と機会曲線の自動描画 (宿題No.5対応)</h2>
+        <p style="font-size:0.9rem; color:#666;">※宿題のデフォルト値：X（期待値8%, 標準偏差2%）、Y（期待値2%, 標準偏差1%）、相関係数 -0.5</p>
+        <div class="input-group">
+            <label for="p5_mux">金融商品X の期待収益率 &mu;<sub>X</sub> (%):</label>
+            <input type="number" id="p5_mux" value="8">
+        </div>
+        <div class="input-group">
+            <label for="p5_sigmax">金融商品X の標準偏差 &sigma;<sub>X</sub> (%):</label>
+            <input type="number" id="p5_sigmax" value="2">
+        </div>
+        <div class="input-group">
+            <label for="p5_muy">金融商品Y の期待収益率 &mu;<sub>Y</sub> (%):</label>
+            <input type="number" id="p5_muy" value="2">
+        </div>
+        <div class="input-group">
+            <label for="p5_sigmay">金融商品Y の標準偏差 &sigma;<sub>Y</sub> (%):</label>
+            <input type="number" id="p5_sigmay" value="1">
+        </div>
+        <div class="input-group">
+            <label for="p5_rho">相関係数 &rho;<sub>XY</sub>:</label>
+            <input type="number" id="p5_rho" value="-0.5" step="0.1" min="-1" max="1">
+        </div>
+        <div class="input-group">
+            <label for="p5_target1">要求リターン閾値1 (%):</label>
+            <input type="number" id="p5_target1" value="3">
+        </div>
+        <div class="input-group">
+            <label for="p5_target2">要求リターン閾値2 (%):</label>
+            <input type="number" id="p5_target2" value="5">
+        </div>
+        
+        <button onclick="calculatePortfolioNo5()">最適化＆機会曲線を描画</button>
+
+        <div id="result5" class="result-box" style="display:none;">
+            <h4>【分析結果】リスクを最小にする金融商品Xへの投資配分率</h4>
+            <div class="result-item">数学的最小リスク資産（MVP）の配分率 a<sup>*</sup>: <span id="res5_mvp_a" class="result-value"></span> %</div>
+            <div class="result-item">問1) リターンを <span id="res5_t1_val"></span>% 以上に維持する場合の最適配分率 a: <span id="res5_ans1" class="result-value" style="font-size:1.2rem; color:#e53e3e;"></span></div>
+            <div class="result-item">問2) リターンを <span id="res5_t2_val"></span>% 以上に維持する場合の最適配分率 a: <span id="res5_ans2" class="result-value" style="font-size:1.2rem; color:#e53e3e;"></span></div>
+            
+            <div class="chart-container">
+                <canvas id="opportunityCurveCanvas"></canvas>
+            </div>
         </div>
     </div>
 
     <script>
+        // 1. 単利・複利計算
         function calculateInterest() {
             var v0 = parseFloat(document.getElementById('calc1_v0').value);
             var r = parseFloat(document.getElementById('calc1_r').value) / 100;
@@ -294,41 +382,44 @@
             document.getElementById('result1').style.display = 'block';
         }
 
+        // 2. ローン返済シミュレーション
         function calculateLoan() {
             var p = parseFloat(document.getElementById('calc2_principal').value);
             var r = parseFloat(document.getElementById('calc2_r').value) / 100;
             var t = parseInt(document.getElementById('calc2_t').value);
             
-            // 1. 一括返済
+            // ① 一括返済
             var interest_1 = p * r * t;
             var total_1 = p + interest_1;
-            document.getElementById('res2_1_year').innerText = "毎年利息: " + (p*r).toLocaleString() + " 円 (最終年のみ元金プラス)";
+            document.getElementById('res2_1_year').innerHTML = "毎年末利息: " + (p*r).toLocaleString() + " 円<br>最終10年末: " + (p + p*r).toLocaleString() + " 円 (元金一括)";
             document.getElementById('res2_1_interest').innerText = interest_1.toLocaleString() + " 円";
             document.getElementById('res2_1_total').innerText = total_1.toLocaleString() + " 円";
             
-            // 2. 元金均等返済
+            // ② 元金均等返済
             var principal_per_year = p / t;
             var total_interest_2 = 0;
+            var first_year_2 = principal_per_year + (p * r);
+            var last_year_2 = principal_per_year + (principal_per_year * r);
             for(var i=0; i<t; i++) {
                 total_interest_2 += (p - (principal_per_year * i)) * r;
             }
             var total_2 = p + total_interest_2;
-            var first_year_2 = principal_per_year + (p * r);
-            document.getElementById('res2_2_year').innerText = "初年度: " + first_year_2.toLocaleString() + " 円 (年々減少)";
+            document.getElementById('res2_2_year').innerHTML = "1年目: " + first_year_2.toLocaleString() + " 円<br>10年目: " + last_year_2.toLocaleString() + " 円 (毎年減少)";
             document.getElementById('res2_2_interest').innerText = total_interest_2.toLocaleString() + " 円";
             document.getElementById('res2_2_total').innerText = total_2.toLocaleString() + " 円";
             
-            // 3. 元利均等返済
+            // ③ 元利均等返済
             var y = p * (r / (1 - Math.pow(1 + r, -t)));
             var total_3 = y * t;
             var interest_3 = total_3 - p;
-            document.getElementById('res2_3_year').innerText = "毎年固定: " + y.toLocaleString(undefined, {maximumFractionDigits: 0}) + " 円";
-            document.getElementById('res2_3_interest').innerText = interest_3.toLocaleString(undefined, {maximumFractionDigits: 0}) + " 円";
-            document.getElementById('res2_3_total').innerText = total_3.toLocaleString(undefined, {maximumFractionDigits: 0}) + " 円";
+            document.getElementById('res2_3_year').innerHTML = "毎年一律: " + Math.round(y).toLocaleString() + " 円";
+            document.getElementById('res2_3_interest').innerText = Math.round(interest_3).toLocaleString() + " 円";
+            document.getElementById('res2_3_total').innerText = Math.round(total_3).toLocaleString() + " 円";
             
             document.getElementById('result2').style.display = 'block';
         }
 
+        // 3. 確率シナリオ
         function calculateScenario() {
             var p1 = parseFloat(document.getElementById('p1').value) / 100;
             var r1 = parseFloat(document.getElementById('r1').value);
@@ -352,22 +443,140 @@
             document.getElementById('result3').style.display = 'block';
         }
 
-        function calculatePortfolio() {
+        // 4. 2資産ポートフォリオ (宿題No.4用)
+        function calculatePortfolioNo4() {
             var mux = parseFloat(document.getElementById('p_mux').value);
             var sigmax = parseFloat(document.getElementById('p_sigmax').value);
             var muy = parseFloat(document.getElementById('p_muy').value);
             var sigmay = parseFloat(document.getElementById('p_sigmay').value);
-            var rho = parseFloat(document.getElementById('p_rho').value);
             var a = parseFloat(document.getElementById('p_weight').value);
             
             var p_return = (a * mux) + ((1 - a) * muy);
-            var p_variance = (Math.pow(a, 2) * Math.pow(sigmax, 2)) + (Math.pow(1 - a, 2) * Math.pow(sigmay, 2)) + (2 * a * (1 - a) * rho * sigmax * sigmay);
-            var p_sd = Math.sqrt(p_variance);
-            
+            document.getElementById('res4_current_a').innerText = a;
             document.getElementById('res4_return').innerText = p_return.toFixed(2);
-            document.getElementById('res4_variance').innerText = p_variance.toFixed(2);
-            document.getElementById('res4_sd').innerText = p_sd.toFixed(2);
+            
+            // 各相関係数でのリスクを計算
+            function getSd(rho) {
+                var v = (Math.pow(a,2) * Math.pow(sigmax,2)) + (Math.pow(1-a,2) * Math.pow(sigmay,2)) + (2 * a * (1-a) * rho * sigmax * sigmay);
+                return Math.sqrt(v);
+            }
+            
+            document.getElementById('res4_rho_0').innerText = getSd(0).toFixed(2) + " %";
+            document.getElementById('res4_rho_minus1').innerText = getSd(-1).toFixed(2) + " %";
+            document.getElementById('res4_rho_05').innerText = getSd(0.5).toFixed(2) + " %";
+            
             document.getElementById('result4').style.display = 'block';
+        }
+
+        // 5. 最適化＆機会曲線 (宿題No.5用)
+        var currentChart = null;
+        function calculatePortfolioNo5() {
+            var mux = parseFloat(document.getElementById('p5_mux').value);
+            var sigmax = parseFloat(document.getElementById('p5_sigmax').value);
+            var muy = parseFloat(document.getElementById('p5_muy').value);
+            var sigmay = parseFloat(document.getElementById('p5_sigmay').value);
+            var rho = parseFloat(document.getElementById('p5_rho').value);
+            var t1 = parseFloat(document.getElementById('p5_target1').value);
+            var t2 = parseFloat(document.getElementById('p5_target2').value);
+            
+            // 数学的最小リスク資産(MVP)の配分比率aの算出式
+            // a* = (σY^2 - ρ * σX * σY) / (σX^2 + σY^2 - 2 * ρ * σX * σY)
+            var num = Math.pow(sigmay, 2) - (rho * sigmax * sigmay);
+            var den = Math.pow(sigmax, 2) + Math.pow(sigmay, 2) - (2 * rho * sigmax * sigmay);
+            var mvp_a = num / den;
+            
+            document.getElementById('res5_mvp_a').innerText = (mvp_a * 100).toFixed(2);
+            document.getElementById('res5_t1_val').innerText = t1;
+            document.getElementById('res5_t2_val').innerText = t2;
+            
+            // 投資比率aに対応するリターンを返す関数
+            function getReturn(weight_a) {
+                return (weight_a * mux) + ((1 - weight_a) * muy);
+            }
+            
+            // 各目標リターンを達成するための投資比率aの下限/必要値を計算
+            // μ_w = a*μX + (1-a)*μY = a(μX - μY) + μY  => a = (μ_w - μY) / (μX - μY)
+            function getRequiredA(targetRet) {
+                return (targetRet - muy) / (mux - muy);
+            }
+            
+            var req_a1 = getRequiredA(t1);
+            var req_a2 = getRequiredA(t2);
+            
+            // 宿題の「リスクを最小化する」ロジック判定
+            // MVPの比率が要求比率を満たしていればMVPが最適、そうでなければ要求リターンを満たすエッジ（境界）が最適
+            var ans_a1 = (getReturn(mvp_a) >= t1) ? mvp_a : req_a1;
+            var ans_a2 = (getReturn(mvp_a) >= t2) ? mvp_a : req_a2;
+            
+            document.getElementById('res5_ans1').innerText = (ans_a1 * 100).toFixed(2) + " % (" + (ans_a1 * 100).toFixed(0) + "%)";
+            document.getElementById('res5_ans2').innerText = (ans_a2 * 100).toFixed(2) + " % (" + (ans_a2 * 100).toFixed(0) + "%)";
+            
+            // チャートデータの生成 (aを0から1まで101分割)
+            var chartData = [];
+            for (var i = 0; i <= 100; i++) {
+                var a_curr = i / 100;
+                var ret_curr = getReturn(a_curr);
+                var var_curr = (Math.pow(a_curr, 2) * Math.pow(sigmax, 2)) + (Math.pow(1 - a_curr, 2) * Math.pow(sigmay, 2)) + (2 * a_curr * (1 - a_curr) * rho * sigmax * sigmay);
+                var sd_curr = Math.sqrt(var_curr);
+                chartData.push({ x: sd_curr, y: ret_curr, a: a_curr });
+            }
+            
+            document.getElementById('result5').style.display = 'block';
+            
+            // Chart.jsによる描画
+            var ctx = document.getElementById('opportunityCurveCanvas').getContext('2d');
+            if (currentChart) { currentChart.destroy(); }
+            
+            currentChart = new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: '機会曲線 (Portfolio Opportunity Curve)',
+                        data: chartData,
+                        showLine: true,
+                        borderColor: '#2b6cb0',
+                        backgroundColor: 'rgba(43, 108, 176, 0.2)',
+                        borderWidth: 2,
+                        pointRadius: 2
+                    },
+                    {
+                        label: 'MVP (最小分散ポートフォリオ)',
+                        data: [{
+                            x: Math.sqrt((Math.pow(mvp_a,2)*Math.pow(sigmax,2)) + (Math.pow(1-mvp_a,2)*Math.pow(sigmay,2)) + (2*mvp_a*(1-mvp_a)*rho*sigmax*sigmay)),
+                            y: getReturn(mvp_a)
+                        }],
+                        backgroundColor: '#e53e3e',
+                        pointRadius: 6,
+                        pointHoverRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            title: { display: true, text: 'リスク (標準偏差 σ) %' }
+                        },
+                        y: {
+                            title: { display: true, text: '期待収益率 (リターン μ) %' }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    if(context.datasetIndex === 0) {
+                                        var p = chartData[context.dataIndex];
+                                        return '比率a: ' + (p.a*100).toFixed(0) + '%, リスク: ' + p.x.toFixed(2) + '%, リターン: ' + p.y.toFixed(2) + '%';
+                                    } else {
+                                        return 'MVP (最小リスク点)';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            });
         }
     </script>
 </body>
