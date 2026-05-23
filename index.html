@@ -1,633 +1,302 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- ===================================================== -->
+<!-- 追加ライブラリ -->
+<!-- ===================================================== -->
 
-<title>金融工学 完全授業資料システム</title>
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<style>
+<!-- MathJax -->
+<script>
+window.MathJax = {
+    tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+};
+</script>
 
-body{
-    margin:0;
-    font-family:"Yu Gothic",sans-serif;
-    background:#f4f7fb;
-    color:#222;
-    line-height:1.8;
-}
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
-header{
-    background:linear-gradient(135deg,#003366,#0055aa);
-    color:white;
-    text-align:center;
-    padding:50px;
-}
-
-h1{
-    margin:0;
-    font-size:48px;
-}
-
-.container{
-    width:95%;
-    max-width:1400px;
-    margin:auto;
-    padding:30px 0;
-}
-
-section{
-    background:white;
-    margin-bottom:40px;
-    padding:35px;
-    border-radius:18px;
-    box-shadow:0 4px 12px rgba(0,0,0,0.1);
-}
-
-h2{
-    color:#003366;
-    border-left:8px solid #0055aa;
-    padding-left:15px;
-}
-
-h3{
-    color:#0055aa;
-}
-
-table{
-    width:100%;
-    border-collapse:collapse;
-    margin-top:20px;
-}
-
-th,td{
-    border:1px solid #ccc;
-    padding:12px;
-    text-align:center;
-}
-
-th{
-    background:#dceeff;
-}
-
-.formula{
-    background:#eef5ff;
-    border-left:5px solid #3399ff;
-    padding:15px;
-    margin:20px 0;
-    font-family:Consolas, monospace;
-    font-size:18px;
-}
-
-input, textarea{
-    width:100%;
-    padding:10px;
-    margin-top:5px;
-    margin-bottom:15px;
-    border-radius:8px;
-    border:1px solid #aaa;
-    font-size:16px;
-}
-
-button{
-    padding:12px 20px;
-    border:none;
-    border-radius:10px;
-    background:#0055aa;
-    color:white;
-    font-size:16px;
-    cursor:pointer;
-}
-
-button:hover{
-    background:#003366;
-}
-
-.result{
-    background:#eef5ff;
-    border-left:5px solid #3399ff;
-    padding:15px;
-    margin-top:20px;
-    font-size:18px;
-}
-
-svg{
-    width:100%;
-    height:auto;
-    margin-top:30px;
-    border:1px solid #ddd;
-    background:white;
-}
-
-footer{
-    background:#003366;
-    color:white;
-    text-align:center;
-    padding:25px;
-}
-
-</style>
-</head>
-
-<body>
-
-<header>
-<h1>金融工学 完全授業資料システム</h1>
-<p>金融市場・投資理論・ポートフォリオ理論・最適化</p>
-</header>
-
-<div class="container">
-
-<!-- ======================================= -->
-<!-- 金融市場 -->
-<!-- ======================================= -->
+<!-- ===================================================== -->
+<!-- 第2章 利息計算（拡張版） -->
+<!-- ===================================================== -->
 
 <section>
 
-<h2>第1章 金融市場</h2>
+<h2>第2章 利息計算（ローン返済シミュレーション）</h2>
 
-<table>
+<p>
+以下の3種類の返済方式を比較できます。
+</p>
 
-<tr>
-<th>市場</th>
-<th>内容</th>
-<th>代表例</th>
-</tr>
-
-<tr>
-<td>短期金融市場</td>
-<td>1年以内の資金貸借</td>
-<td>CD・CP・TB</td>
-</tr>
-
-<tr>
-<td>長期金融市場</td>
-<td>1年以上の資金運用</td>
-<td>株式・債券</td>
-</tr>
-
-</table>
-
-</section>
-
-<!-- ======================================= -->
-<!-- 利息 -->
-<!-- ======================================= -->
-
-<section>
-
-<h2>第2章 利息計算</h2>
+<ul>
+<li>元利均等返済</li>
+<li>元金均等返済</li>
+<li>一括返済</li>
+</ul>
 
 <div class="formula">
-A = P(1 + r)^n
+\( A = P(1+r)^n \)
 </div>
 
-<label>元本 P</label>
-<input type="number" id="principal" value="100000">
+<label>借入金額（円）</label>
+<input type="number"
+id="loanAmount"
+value="3000000">
 
-<label>年利率 r (%)</label>
-<input type="number" id="rate" value="5">
+<label>年利率（%）</label>
+<input type="number"
+id="interestRate"
+step="0.01"
+value="2.0">
 
-<label>年数 n</label>
-<input type="number" id="years" value="10">
+<label>返済年数</label>
+<input type="number"
+id="loanYears"
+value="35">
 
-<button onclick="calculateInterest()">
-計算
-</button>
-
-<div class="result" id="interestResult">
-ここに結果が表示されます
-</div>
-
-</section>
-
-<!-- ======================================= -->
-<!-- リターン -->
-<!-- ======================================= -->
-
-<section>
-
-<h2>第3章 リターンとリスク</h2>
-
-<div class="formula">
-R = (P1 - P0) / P0
-</div>
-
-<div class="formula">
-V(R) = Σ (Ri - E(R))² pi
-</div>
-
-<label>
-収益率データ（カンマ区切り）
-</label>
-
-<textarea id="returnsInput"
-rows="5">10,5,-3,8,12</textarea>
-
-<button onclick="calculateRiskReturn()">
-計算
+<button onclick="calculateLoans()">
+返済計算
 </button>
 
 <div class="result"
-id="riskReturnResult">
-結果が表示されます
+id="loanResult">
+ここに結果が表示されます
 </div>
+
+<canvas id="loanChart"
+height="120"></canvas>
 
 </section>
 
-<!-- ======================================= -->
-<!-- CSV -->
-<!-- ======================================= -->
+<script>
+
+let loanChart = null;
+
+function calculateLoans(){
+
+    let P =
+        parseFloat(
+            document.getElementById("loanAmount").value
+        );
+
+    let annualRate =
+        parseFloat(
+            document.getElementById("interestRate").value
+        ) / 100;
+
+    let years =
+        parseFloat(
+            document.getElementById("loanYears").value
+        );
+
+    let months =
+        years * 12;
+
+    let r =
+        annualRate / 12;
+
+    // =========================================
+    // 元利均等
+    // =========================================
+
+    let annuityMonthly =
+
+        P *
+        r *
+        Math.pow(1+r, months)
+
+        /
+
+        (
+            Math.pow(1+r, months) - 1
+        );
+
+    let annuityTotal =
+        annuityMonthly * months;
+
+    // =========================================
+    // 元金均等
+    // =========================================
+
+    let principalPart =
+        P / months;
+
+    let remaining = P;
+
+    let equalPrincipalTotal = 0;
+
+    for(let i=0;i<months;i++){
+
+        let payment =
+            principalPart +
+            remaining * r;
+
+        equalPrincipalTotal += payment;
+
+        remaining -= principalPart;
+
+    }
+
+    // =========================================
+    // 一括返済
+    // =========================================
+
+    let lumpSum =
+        P * Math.pow(1+annualRate, years);
+
+    // =========================================
+    // 表示
+    // =========================================
+
+    document.getElementById("loanResult").innerHTML =
+
+        "<h3>返済結果</h3>"
+
+        +
+
+        "<b>元利均等返済：</b><br>"
+        +
+        "毎月返済額："
+        +
+        annuityMonthly.toFixed(0)
+        +
+        " 円<br>"
+        +
+        "総返済額："
+        +
+        annuityTotal.toFixed(0)
+        +
+        " 円"
+
+        +
+
+        "<br><br>"
+
+        +
+
+        "<b>元金均等返済：</b><br>"
+        +
+        "総返済額："
+        +
+        equalPrincipalTotal.toFixed(0)
+        +
+        " 円"
+
+        +
+
+        "<br><br>"
+
+        +
+
+        "<b>一括返済：</b><br>"
+        +
+        "総返済額："
+        +
+        lumpSum.toFixed(0)
+        +
+        " 円";
+
+    // =========================================
+    // グラフ
+    // =========================================
+
+    const ctx =
+        document.getElementById("loanChart");
+
+    if(loanChart){
+
+        loanChart.destroy();
+
+    }
+
+    loanChart =
+        new Chart(ctx, {
+
+            type: 'bar',
+
+            data: {
+
+                labels: [
+
+                    '元利均等',
+                    '元金均等',
+                    '一括返済'
+
+                ],
+
+                datasets: [{
+
+                    label: '総返済額',
+
+                    data: [
+
+                        annuityTotal,
+                        equalPrincipalTotal,
+                        lumpSum
+
+                    ]
+
+                }]
+
+            },
+
+            options: {
+
+                responsive:true,
+
+                plugins:{
+                    legend:{
+                        display:true
+                    }
+                }
+
+            }
+
+        });
+
+}
+
+</script>
+
+<!-- ===================================================== -->
+<!-- CSV → 自動グラフ化 -->
+<!-- ===================================================== -->
 
 <section>
 
-<h2>第4章 CSVデータ読み込み</h2>
+<h2>CSVデータ分析（株価分析）</h2>
+
+<p>
+CSVファイルを読み込むと、
+自動でグラフ化します。
+</p>
 
 <input type="file"
-id="csvFile"
+id="stockCSV"
 accept=".csv">
 
-<button onclick="readCSV()">
+<button onclick="analyzeStockCSV()">
 CSV解析
 </button>
 
 <div class="result"
-id="csvResult">
-結果が表示されます
+id="stockResult">
+ここに結果が表示されます
 </div>
+
+<canvas id="stockChart"
+height="120"></canvas>
 
 </section>
-
-<!-- ======================================= -->
-<!-- 期待値 -->
-<!-- ======================================= -->
-
-<section>
-
-<h2>第5章 期待値と標準偏差</h2>
-
-<label>確率</label>
-<input type="text"
-id="probabilities"
-value="0.3,0.4,0.3">
-
-<label>収益率</label>
-<input type="text"
-id="returns"
-value="-10,5,20">
-
-<button onclick="calculateExpectedValue()">
-計算
-</button>
-
-<div class="result"
-id="expectedResult">
-結果が表示されます
-</div>
-
-</section>
-
-<!-- ======================================= -->
-<!-- ポートフォリオ -->
-<!-- ======================================= -->
-
-<section>
-
-<h2>第6章 ポートフォリオ理論</h2>
-
-<div class="formula">
-μW = aμX + (1-a)μY
-</div>
-
-<div class="formula">
-σ²W = a²σ²X + (1-a)²σ²Y + 2a(1-a)ρXYσXσY
-</div>
-
-<label>投資比率 a</label>
-<input type="number"
-id="a"
-step="0.01"
-value="0.6">
-
-<label>μX</label>
-<input type="number"
-id="muX"
-value="10">
-
-<label>μY</label>
-<input type="number"
-id="muY"
-value="5">
-
-<label>σX</label>
-<input type="number"
-id="sigmaX"
-value="20">
-
-<label>σY</label>
-<input type="number"
-id="sigmaY"
-value="10">
-
-<label>ρXY</label>
-<input type="number"
-id="rho"
-step="0.01"
-value="0.4">
-
-<button onclick="calculatePortfolio()">
-計算
-</button>
-
-<div class="result"
-id="portfolioResult">
-結果が表示されます
-</div>
-
-</section>
-
-<!-- ======================================= -->
-<!-- 機会曲線 -->
-<!-- ======================================= -->
-
-<section>
-
-<h2>第7章 機会曲線</h2>
-
-<p>
-リスクとリターンの関係
-</p>
-
-<svg viewBox="0 0 900 500">
-
-<line x1="100" y1="400"
-x2="800" y2="400"
-stroke="black"
-stroke-width="3"/>
-
-<line x1="100" y1="400"
-x2="100" y2="50"
-stroke="black"
-stroke-width="3"/>
-
-<path d="
-M150 350
-Q350 430 750 100
-"
-fill="none"
-stroke="#0066cc"
-stroke-width="6"
-/>
-
-<circle cx="150"
-cy="350"
-r="10"
-fill="green"/>
-
-<circle cx="350"
-cy="430"
-r="10"
-fill="orange"/>
-
-<circle cx="750"
-cy="100"
-r="10"
-fill="red"/>
-
-<text x="760"
-y="440"
-font-size="22">
-リスク
-</text>
-
-<text x="20"
-y="80"
-font-size="22">
-リターン
-</text>
-
-</svg>
-
-</section>
-
-<!-- ======================================= -->
-<!-- 最適化 -->
-<!-- ======================================= -->
-
-<section>
-
-<h2>第8章 ポートフォリオ最適化</h2>
-
-<div class="formula">
-Max μW(a)
-</div>
-
-<div class="formula">
-Min σ²W(a)
-</div>
-
-<label>μX</label>
-<input type="number"
-id="optMuX"
-value="12">
-
-<label>μY</label>
-<input type="number"
-id="optMuY"
-value="5">
-
-<button onclick="optimizePortfolio()">
-最適化
-</button>
-
-<div class="result"
-id="optimizationResult">
-結果が表示されます
-</div>
-
-</section>
-
-<!-- ======================================= -->
-<!-- 相関係数 -->
-<!-- ======================================= -->
-
-<section>
-
-<h2>第9章 相関係数</h2>
-
-<table>
-
-<tr>
-<th>ρ</th>
-<th>意味</th>
-<th>特徴</th>
-</tr>
-
-<tr>
-<td>1</td>
-<td>完全相関</td>
-<td>分散効果なし</td>
-</tr>
-
-<tr>
-<td>0</td>
-<td>無相関</td>
-<td>リスク軽減可能</td>
-</tr>
-
-<tr>
-<td>-1</td>
-<td>完全逆相関</td>
-<td>理論上リスク0</td>
-</tr>
-
-</table>
-
-</section>
-
-<!-- ======================================= -->
-<!-- マーコウィッツ -->
-<!-- ======================================= -->
-
-<section>
-
-<h2>第10章 Harry Markowitz</h2>
-
-<svg viewBox="0 0 900 300">
-
-<rect x="80"
-y="50"
-width="740"
-height="180"
-rx="20"
-fill="#eef5ff"
-stroke="#3399ff"
-stroke-width="4"/>
-
-<text x="180"
-y="110"
-font-size="34"
-fill="#003366">
-Harry Markowitz
-</text>
-
-<text x="180"
-y="160"
-font-size="24">
-・現代ポートフォリオ理論
-</text>
-
-<text x="180"
-y="200"
-font-size="24">
-・1990年 ノーベル経済学賞
-</text>
-
-</svg>
-
-</section>
-
-</div>
-
-<footer>
-金融工学 完全授業資料システム
-</footer>
 
 <script>
 
-function calculateInterest(){
+let stockChart = null;
 
-    let P =
-        parseFloat(
-            document.getElementById("principal").value
-        );
-
-    let r =
-        parseFloat(
-            document.getElementById("rate").value
-        ) / 100;
-
-    let n =
-        parseFloat(
-            document.getElementById("years").value
-        );
-
-    let A =
-        P * Math.pow(1+r,n);
-
-    let interest =
-        A - P;
-
-    document.getElementById("interestResult").innerHTML =
-
-        "<b>将来価値：</b> "
-        + A.toFixed(2)
-        + " 円"
-
-        +
-
-        "<br><br>"
-
-        +
-
-        "<b>利息：</b> "
-        + interest.toFixed(2)
-        + " 円";
-
-}
-
-function calculateRiskReturn(){
-
-    let text =
-        document.getElementById("returnsInput").value;
-
-    let values =
-        text.split(",").map(Number);
-
-    let n =
-        values.length;
-
-    let mean =
-        values.reduce((a,b)=>a+b,0)/n;
-
-    let variance =
-        values.reduce(
-            (sum,x)=>
-            sum + Math.pow(x-mean,2),
-            0
-        ) / n;
-
-    let sigma =
-        Math.sqrt(variance);
-
-    document.getElementById("riskReturnResult").innerHTML =
-
-        "<b>期待収益率：</b> "
-        + mean.toFixed(4)
-
-        +
-
-        "<br><br>"
-
-        +
-
-        "<b>分散：</b> "
-        + variance.toFixed(4)
-
-        +
-
-        "<br><br>"
-
-        +
-
-        "<b>標準偏差：</b> "
-        + sigma.toFixed(4);
-
-}
-
-function readCSV(){
+function analyzeStockCSV(){
 
     let file =
-        document.getElementById("csvFile").files[0];
+        document.getElementById("stockCSV").files[0];
 
     if(!file){
 
@@ -648,7 +317,7 @@ function readCSV(){
             let rows =
                 text.split("\n");
 
-            let values = [];
+            let prices = [];
 
             rows.forEach(row=>{
 
@@ -657,32 +326,64 @@ function readCSV(){
 
                 if(!isNaN(num)){
 
-                    values.push(num);
+                    prices.push(num);
 
                 }
 
             });
 
-            let n =
-                values.length;
+            // リターン計算
+
+            let returns = [];
+
+            for(let i=1;i<prices.length;i++){
+
+                let r =
+                    (
+                        prices[i]
+                        -
+                        prices[i-1]
+                    )
+                    /
+                    prices[i-1];
+
+                returns.push(r);
+
+            }
+
+            // 平均
 
             let mean =
-                values.reduce((a,b)=>a+b,0)/n;
+                returns.reduce((a,b)=>a+b,0)
+                /
+                returns.length;
+
+            // 分散
 
             let variance =
-                values.reduce(
+                returns.reduce(
+
                     (sum,x)=>
-                    sum + Math.pow(x-mean,2),
+
+                    sum +
+                    Math.pow(x-mean,2),
+
                     0
-                ) / n;
+
+                )
+                /
+                returns.length;
+
+            // 標準偏差
 
             let sigma =
                 Math.sqrt(variance);
 
-            document.getElementById("csvResult").innerHTML =
+            document.getElementById("stockResult").innerHTML =
 
-                "<b>データ数：</b> "
-                + n
+                "<b>平均収益率：</b> "
+                +
+                mean.toFixed(6)
 
                 +
 
@@ -690,17 +391,48 @@ function readCSV(){
 
                 +
 
-                "<b>平均：</b> "
-                + mean.toFixed(4)
-
+                "<b>リスク（標準偏差）：</b> "
                 +
+                sigma.toFixed(6);
 
-                "<br><br>"
+            // グラフ
 
-                +
+            const ctx =
+                document.getElementById("stockChart");
 
-                "<b>標準偏差：</b> "
-                + sigma.toFixed(4);
+            if(stockChart){
+
+                stockChart.destroy();
+
+            }
+
+            stockChart =
+                new Chart(ctx, {
+
+                    type:'line',
+
+                    data:{
+
+                        labels:
+                            prices.map((_,i)=>i+1),
+
+                        datasets:[{
+
+                            label:'株価',
+
+                            data:prices,
+
+                            tension:0.2
+
+                        }]
+
+                    },
+
+                    options:{
+                        responsive:true
+                    }
+
+                });
 
         };
 
@@ -708,155 +440,144 @@ function readCSV(){
 
 }
 
-function calculateExpectedValue(){
+</script>
 
-    let probs =
-        document.getElementById("probabilities")
-        .value
-        .split(",")
-        .map(Number);
+<!-- ===================================================== -->
+<!-- Efficient Frontier -->
+<!-- ===================================================== -->
 
-    let returns =
-        document.getElementById("returns")
-        .value
-        .split(",")
-        .map(Number);
+<section>
 
-    let mean = 0;
+<h2>Efficient Frontier</h2>
 
-    for(let i=0;i<probs.length;i++){
+<p>
+効率的フロンティアを描画します。
+</p>
 
-        mean += probs[i] * returns[i];
+<button onclick="drawEfficientFrontier()">
+描画
+</button>
 
-    }
+<canvas id="frontierChart"
+height="120"></canvas>
 
-    let variance = 0;
+</section>
 
-    for(let i=0;i<probs.length;i++){
+<script>
 
-        variance +=
-            probs[i] *
-            Math.pow(returns[i]-mean,2);
+let frontierChart = null;
 
-    }
+function drawEfficientFrontier(){
 
-    let sigma =
-        Math.sqrt(variance);
-
-    document.getElementById("expectedResult").innerHTML =
-
-        "<b>期待値：</b> "
-        + mean.toFixed(4)
-
-        +
-
-        "<br><br>"
-
-        +
-
-        "<b>標準偏差：</b> "
-        + sigma.toFixed(4);
-
-}
-
-function calculatePortfolio(){
-
-    let a =
-        parseFloat(document.getElementById("a").value);
-
-    let muX =
-        parseFloat(document.getElementById("muX").value);
-
-    let muY =
-        parseFloat(document.getElementById("muY").value);
-
-    let sigmaX =
-        parseFloat(document.getElementById("sigmaX").value);
-
-    let sigmaY =
-        parseFloat(document.getElementById("sigmaY").value);
-
-    let rho =
-        parseFloat(document.getElementById("rho").value);
-
-    let muW =
-        a*muX + (1-a)*muY;
-
-    let variance =
-        (a*a*sigmaX*sigmaX)
-        +
-        ((1-a)*(1-a)*sigmaY*sigmaY)
-        +
-        (
-            2*a*(1-a)*
-            rho*sigmaX*sigmaY
-        );
-
-    let sigmaW =
-        Math.sqrt(variance);
-
-    document.getElementById("portfolioResult").innerHTML =
-
-        "<b>期待収益率：</b> "
-        + muW.toFixed(4)
-
-        +
-
-        "<br><br>"
-
-        +
-
-        "<b>標準偏差：</b> "
-        + sigmaW.toFixed(4);
-
-}
-
-function optimizePortfolio(){
-
-    let muX =
-        parseFloat(
-            document.getElementById("optMuX").value
-        );
-
-    let muY =
-        parseFloat(
-            document.getElementById("optMuY").value
-        );
-
-    let bestA = 0;
-    let bestReturn = -999999;
+    let risks = [];
+    let returns = [];
 
     for(let a=0;a<=1;a+=0.01){
+
+        // 仮データ
+
+        let muX = 0.12;
+        let muY = 0.05;
+
+        let sigmaX = 0.20;
+        let sigmaY = 0.10;
+
+        let rho = 0.3;
 
         let mu =
             a*muX + (1-a)*muY;
 
-        if(mu > bestReturn){
+        let variance =
 
-            bestReturn = mu;
-            bestA = a;
+            (a*a*sigmaX*sigmaX)
 
-        }
+            +
+
+            ((1-a)*(1-a)*sigmaY*sigmaY)
+
+            +
+
+            (
+                2 *
+                a *
+                (1-a) *
+                rho *
+                sigmaX *
+                sigmaY
+            );
+
+        let sigma =
+            Math.sqrt(variance);
+
+        risks.push(sigma);
+        returns.push(mu);
 
     }
 
-    document.getElementById("optimizationResult").innerHTML =
+    const ctx =
+        document.getElementById("frontierChart");
 
-        "<b>最適投資比率：</b> "
-        + bestA.toFixed(2)
+    if(frontierChart){
 
-        +
+        frontierChart.destroy();
 
-        "<br><br>"
+    }
 
-        +
+    frontierChart =
+        new Chart(ctx, {
 
-        "<b>最大期待収益率：</b> "
-        + bestReturn.toFixed(4);
+            type:'scatter',
+
+            data:{
+
+                datasets:[{
+
+                    label:'Efficient Frontier',
+
+                    data:
+                        risks.map(
+
+                            (r,i)=>({
+
+                                x:r,
+                                y:returns[i]
+
+                            })
+
+                        ),
+
+                    showLine:true
+
+                }]
+
+            },
+
+            options:{
+
+                responsive:true,
+
+                scales:{
+
+                    x:{
+                        title:{
+                            display:true,
+                            text:'Risk'
+                        }
+                    },
+
+                    y:{
+                        title:{
+                            display:true,
+                            text:'Return'
+                        }
+                    }
+
+                }
+
+            }
+
+        });
 
 }
 
 </script>
-
-</body>
-</html>
