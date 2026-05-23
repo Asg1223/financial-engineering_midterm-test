@@ -1,106 +1,3 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>金融工学 計算・シミュレーション自動化システム v3</title>
-    <!-- Chart.js 読み込み -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        body {
-            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f0f4f8;
-        }
-        h1 {
-            text-align: center;
-            color: #1a365d;
-            border-bottom: 3px solid #2b6cb0;
-            padding-bottom: 10px;
-            margin-bottom: 30px;
-        }
-        .section {
-            background: #fff;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            margin-bottom: 25px;
-        }
-        h2 {
-            color: #2b6cb0;
-            border-left: 5px solid #2b6cb0;
-            padding-left: 10px;
-            margin-top: 0;
-            font-size: 1.3rem;
-        }
-        .formula {
-            background-color: #f7fafc;
-            border: 1px solid #e2e8f0;
-            padding: 12px;
-            border-radius: 6px;
-            font-family: 'Times New Roman', serif;
-            font-style: italic;
-            margin-bottom: 15px;
-            color: #4a5568;
-        }
-        .input-group {
-            margin-bottom: 12px;
-        }
-        label {
-            display: inline-block;
-            width: 280px;
-            font-weight: bold;
-            color: #4a5568;
-        }
-        input[type="number"] {
-            width: 120px;
-            padding: 6px 10px;
-            border: 1px solid #cbd5e0;
-            border-radius: 4px;
-            font-size: 1rem;
-        }
-        button {
-            background-color: #3182ce;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 1rem;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background 0.2s;
-            display: inline-block;
-            margin-top: 15px;
-            margin-right: 10px;
-        }
-        button:hover {
-            background-color: #2b6cb0;
-        }
-        .result-box {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: #ebf8ff;
-            border-left: 4px solid #3182ce;
-            border-radius: 4px;
-        }
-        .result-item {
-            margin-bottom: 8px;
-            font-size: 1.05rem;
-        }
-        .result-value {
-            font-weight: bold;
-            color: #2b6cb0;
-        }
-        .badge-ans {
-            background-color: #e53e3e;
-            color: white;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-weight: bold;
-            margin-left: 10px;
-        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -124,9 +21,9 @@
         }
         .chart-container {
             position: relative;
-            height: 450px;
+            height: 480px;
             width: 100%;
-            max-width: 750px;
+            max-width: 800px;
             background: #fff;
             padding: 15px;
             border-radius: 8px;
@@ -138,17 +35,25 @@
             font-size: 0.9rem;
             color: #4a5568;
             background: #f7fafc;
-            padding: 10px;
+            padding: 12px;
             border-radius: 6px;
             border: 1px solid #e2e8f0;
             width: 100%;
-            max-width: 730px;
+            max-width: 780px;
+        }
+        .mode-container {
+            background: #fff5f5;
+            border: 2px dashed #e53e3e;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+            margin-bottom: 15px;
         }
     </style>
 </head>
 <body>
 
-    <h1>金融工学 計算・シミュレーション自動化システム v3</h1>
+    <h1>金融工学 計算・シミュレーション自動化システム v4</h1>
 
     <!-- 1. 単利・複利の計算 -->
     <div class="section">
@@ -181,9 +86,7 @@
     <div class="section">
         <h2>2. ローン返済シミュレーション (宿題No.2対応)</h2>
         <div class="formula">
-            ① 一括返済: 毎年末に利息、10年末に元金を返済。<br>
-            ② 元金均等返済: 毎年末に元金均等額と利息を返済。<br>
-            ③ 元利均等返済: 毎年末に同じ金額を返済。
+            ① 一括返済 / ② 元金均等返済 / ③ 元利均等返済
         </div>
         <div class="input-group">
             <label for="calc2_principal">借入元金 (円):</label>
@@ -237,12 +140,6 @@
     <!-- 3. シナリオに基づくリターンとリスクの計算 -->
     <div class="section">
         <h2>3. 確率シナリオに基づくリターン・リスク計算 (第3回講義より)</h2>
-        <div class="formula">
-            期待値（リターン）: &mu; = &Sigma; (p<sub>i</sub> × R<sub>i</sub>) <br>
-            分散: &sigma;<sup>2</sup> = &Sigma; [ p<sub>i</sub> × (R<sub>i</sub> - &mu;)<sup>2</sup> ] <br>
-            標準偏差（リスク）: &sigma; = &radic;(&sigma;<sup>2</sup>)
-        </div>
-        
         <p><strong>シナリオ入力</strong></p>
         <table>
             <thead>
@@ -279,14 +176,9 @@
         </div>
     </div>
 
-    <!-- 4. 2資産ポートフォリオのリターンとリスク（宿題No.4対応、相関係数手動指定版） -->
+    <!-- 4. 2資産ポートフォリオのリターンとリスク（宿題No.4対応） -->
     <div class="section">
         <h2>4. 2資産ポートフォリオのリターンとリスク (宿題No.4対応・相関係数自由指定)</h2>
-        <div class="formula">
-            ポートフォリオリターン: &mu;<sub>w</sub> = a × &mu;<sub>X</sub> + (1 - a) × &mu;<sub>Y</sub> <br>
-            ポートフォリオ標準偏差: &sigma;<sub>w</sub> = &radic;[ a<sup>2</sup>&sigma;<sub>X</sub><sup>2</sup> + (1-a)<sup>2</sup>&sigma;<sub>Y</sub><sup>2</sup> + 2a(1-a)&rho;<sub>XY</sub>&sigma;<sub>X</sub>&sigma;<sub>Y</sub> ]
-        </div>
-        
         <div class="input-group">
             <label for="p_mux">資産X の期待収益率 &mu;<sub>X</sub> (%):</label>
             <input type="number" id="p_mux" value="10">
@@ -309,7 +201,7 @@
         </div>
         <div class="input-group" style="background:#eef2f7; padding:10px; border-radius:5px; margin-top:15px;">
             <label for="p_rho_user" style="color:#2b6cb0;">自由指定する相関係数 &rho;<sub>XY</sub> (-1.0 ～ 1.0):</label>
-            <input type="number" id="p_rho_user" value="0.0" step="0.1" min="-1" max="1" style="border: 2px solid #2b6cb0;">
+            <input type="number" id="p_rho_user" value="0.0" step="0.1" min="-1" max="1">
         </div>
         
         <button onclick="calculatePortfolioNo4()">計算を実行する</button>
@@ -320,8 +212,7 @@
                 ご自身で指定した相関係数 (&rho; = <span id="res4_user_rho_val" style="font-weight:bold;"></span>) のリスク: <span id="res4_user_sd_res" class="result-value" style="color:#2f855a;"></span> %
             </div>
             
-            <h4 style="margin-top:15px; margin-bottom:5px;">(参考) 宿題問題の各相関係数におけるリスク結果一覧:</h4>
-            <table>
+            <table style="font-size:0.9rem;">
                 <thead>
                     <tr>
                         <th>宿題の条件 / 相関係数 &rho;</th>
@@ -329,26 +220,23 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>&rho; = 0 のとき (問2)</td>
-                        <td id="res4_rho_0"></td>
-                    </tr>
-                    <tr>
-                        <td>&rho; = -1 のとき (問3)</td>
-                        <td id="res4_rho_minus1"></td>
-                    </tr>
-                    <tr>
-                        <td>&rho; = 0.5 のとき (問4)</td>
-                        <td id="res4_rho_05"></td>
-                    </tr>
+                    <tr><td>&rho; = 0 のとき (問2)</td><td id="res4_rho_0"></td></tr>
+                    <tr><td>&rho; = -1 のとき (問3)</td><td id="res4_rho_minus1"></td></tr>
+                    <tr><td>&rho; = 0.5 のとき (問4)</td><td id="res4_rho_05"></td></tr>
                 </tbody>
             </table>
         </div>
     </div>
 
-    <!-- 5. 宿題No.5対応：最小リスク配分比率算出 ＆ 視認性を劇的に向上させた機会曲線グラフ -->
+    <!-- 5. 宿題No.5拡張版：リスク重視とリターン重視の双璧モード切替システム -->
     <div class="section">
-        <h2>5. 最適ポートフォリオ選択と機会曲線のグラフィカル描画 (宿題No.5対応)</h2>
+        <h2>5. 最適ポートフォリオ選択と機会曲線のグラフィカル描画 (宿題No.5・両重視対応版)</h2>
+        <div class="formula">
+            第5回講義資料より:<br>
+            • <b>リスク重視型 (リスク最小化)</b>: 目標リターン以上の中でリスクを一番低くする [宿題の標準]<br>
+            • <b>リターン重視型 (リターン最大化)</b>: 許容できる最大リスク以下の中でリターンを一番高くする [新規拡張]
+        </div>
+
         <div class="input-group">
             <label for="p5_mux">金融商品X の期待収益率 &mu;<sub>X</sub> (%):</label>
             <input type="number" id="p5_mux" value="8">
@@ -365,33 +253,74 @@
             <label for="p5_sigmay">金融商品Y の標準偏差 &sigma;<sub>Y</sub> (%):</label>
             <input type="number" id="p5_sigmay" value="1">
         </div>
-        <div class="input-group" style="background:#eef2f7; padding:10px; border-radius:5px;">
-            <label for="p5_rho" style="color:#2b6cb0;">相関係数 &rho;<sub>XY</sub> (-1.0 ～ 1.0):</label>
-            <input type="number" id="p5_rho" value="-0.5" step="0.1" min="-1" max="1" style="border: 2px solid #2b6cb0;">
-        </div>
         <div class="input-group">
-            <label for="p5_target1">問1の要求リターン閾値 (%):</label>
-            <input type="number" id="p5_target1" value="3">
+            <label for="p5_rho">相関係数 &rho;<sub>XY</sub> (-1.0 ～ 1.0):</label>
+            <input type="number" id="p5_rho" value="-0.5" step="0.1" min="-1" max="1">
         </div>
-        <div class="input-group">
-            <label for="p5_target2">問2の要求リターン閾値 (%):</label>
-            <input type="number" id="p5_target2" value="5">
+
+        <!-- ユーザーの投資スタンス（重視）の選択 -->
+        <div class="mode-container">
+            <div class="input-group">
+                <label for="p5_invest_mode" style="color:#c53030; font-size:1.05rem;">🎯 あなたの投資スタンス（モード）:</label>
+                <select id="p5_invest_mode" onchange="toggleModeInputs()">
+                    <option value="risk_focus">🛡️ リスク重視型 (一定リターン以上でリスク最小)</option>
+                    <option value="return_focus">🔥 リターン重視型 (一定リスク以下でリターン最大)</option>
+                </select>
+            </div>
+
+            <!-- リスク重視時の入力項目 -->
+            <div id="risk_focus_inputs">
+                <div class="input-group">
+                    <label for="p5_target1">条件1：最低限必要なリターン閾値 (%):</label>
+                    <input type="number" id="p5_target1" value="3">
+                </div>
+                <div class="input-group">
+                    <label for="p5_target2">条件2：最低限必要なリターン閾値 (%):</label>
+                    <input type="number" id="p5_target2" value="5">
+                </div>
+            </div>
+
+            <!-- リターン重視時の入力項目 -->
+            <div id="return_focus_inputs" style="display:none;">
+                <div class="input-group">
+                    <label for="p5_max_risk1">条件1：許容できる最大リスク(標準偏差)上限 (%):</label>
+                    <input type="number" id="p5_max_risk1" value="1.2" step="0.1">
+                </div>
+                <div class="input-group">
+                    <label for="p5_max_risk2">条件2：許容できる最大リスク(標準偏差)上限 (%):</label>
+                    <input type="number" id="p5_max_risk2" value="1.6" step="0.1">
+                </div>
+            </div>
         </div>
         
-        <button onclick="calculatePortfolioNo5()">最適化＆わかりやすいグラフを描画</button>
+        <button onclick="calculatePortfolioNo5()" style="background-color: #e53e3e; font-weight:bold;">最適化＆両重視対応グラフを描画</button>
 
         <div id="result5" class="result-box" style="display:none;">
-            <h4>【分析・解答結果】</h4>
+            <h4>【最適ポートフォリオ分析・解答結果】</h4>
             <div class="result-item">数学的最小リスク資産（MVP）の配分率 a<sup>*</sup>: <span id="res5_mvp_a" class="result-value"></span> %</div>
-            <div class="result-item" style="background:#fff; padding:10px; border-radius:5px; margin-bottom:8px; border-left:4px solid #e53e3e;">
-                <strong>問1：リターンを <span id="res5_t1_val"></span>% 以上にする投資比率 a:</strong> 
-                <span id="res5_ans1" style="font-size:1.25rem; font-weight:bold; color:#e53e3e;"></span> 
-                <span class="badge-ans" id="res5_badge1"></span>
+            
+            <div id="res5_risk_box" style="display:block;">
+                <div class="result-item" style="background:#fff; padding:10px; border-radius:5px; margin-bottom:8px; border-left:4px solid #3182ce;">
+                    <strong>問1：リターンを <span id="res5_t1_val"></span>% 以上にする投資比率 a:</strong> 
+                    <span id="res5_ans1" style="font-size:1.25rem; font-weight:bold; color:#2b6cb0;"></span> 
+                    <span class="badge-ans" id="res5_badge1" style="background-color:#3182ce;"></span>
+                </div>
+                <div class="result-item" style="background:#fff; padding:10px; border-radius:5px; border-left:4px solid #3182ce;">
+                    <strong>問2：リターンを <span id="res5_t2_val"></span>% 以上にする投資比率 a:</strong> 
+                    <span id="res5_ans2" style="font-size:1.25rem; font-weight:bold; color:#2b6cb0;"></span>
+                    <span class="badge-ans" id="res5_badge2" style="background-color:#3182ce;"></span>
+                </div>
             </div>
-            <div class="result-item" style="background:#fff; padding:10px; border-radius:5px; border-left:4px solid #e53e3e;">
-                <strong>問2：リターンを <span id="res5_t2_val"></span>% 以上にする投資比率 a:</strong> 
-                <span id="res5_ans2" style="font-size:1.25rem; font-weight:bold; color:#e53e3e;"></span>
-                <span class="badge-ans" id="res5_badge2"></span>
+
+            <div id="res5_return_box" style="display:none;">
+                <div class="result-item" style="background:#fff; padding:10px; border-radius:5px; margin-bottom:8px; border-left:4px solid #dd6b20;">
+                    <strong>条件1：リスクを <span id="res5_r1_val"></span>% 以下に抑えてリターンを最大にする比率 a:</strong> 
+                    <span id="res5_ret_ans1" style="font-size:1.25rem; font-weight:bold; color:#dd6b20;"></span>
+                </div>
+                <div class="result-item" style="background:#fff; padding:10px; border-radius:5px; border-left:4px solid #dd6b20;">
+                    <strong>条件2：リスクを <span id="res5_r2_val"></span>% 以下に抑えてリターンを最大にする比率 a:</strong> 
+                    <span id="res5_ret_ans2" style="font-size:1.25rem; font-weight:bold; color:#dd6b20;"></span>
+                </div>
             </div>
             
             <div class="chart-layout">
@@ -399,26 +328,35 @@
                     <canvas id="opportunityCurveCanvas"></canvas>
                 </div>
                 <div class="chart-legend-custom">
-                    <strong>💡 グラフの読み方と視覚化の工夫:</strong><br>
-                    • <span style="color:#2b6cb0; font-weight:bold;">青い太線</span>がポートフォリオの全選択肢（機会曲線）です。<br>
-                    • <span style="color:#e53e3e; font-weight:bold;">● 赤い丸（MVP）</span>は、この世で一番リスクを低くできる配合点（底）を表します。<br>
-                    • <span style="color:#48bb78; font-weight:bold;">■ 緑の四角 / ◆ 紫のひし形</span>は、宿題の問1・問2それぞれの「制約条件を満たした上で最もリスクが低くなる最適解」の位置をプロットしています。<br>
-                    • グラフ上にマウスを載せると、そのポイントの具体的な「投資比率a」がポップアップします。
+                    <strong>💡 グラフとスタンス（重視）の連動システム:</strong><br>
+                    • <span style="color:#2b6cb0; font-weight:bold;">青い太線</span>がポートフォリオの機会曲線です。上が「効率的フロンティア」、MVP（赤丸）より下が「非効率」な領域です。<br>
+                    • <b>リスク重視時</b>：指定リターン以上の高さの線（上半分など）の中で、<b>一番左（リスク最小）</b>にある点をプロットします。<br>
+                    • <b>リターン重視時</b>：指定リスクの縦線より左側にある青線のうち、<b>一番上（リターン最大化＝効率的フロンティア上）</b>にある点をプロットします。
                 </div>
             </div>
         </div>
     </div>
 
     <script>
+        // モード切替のUI制御
+        function toggleModeInputs() {
+            var mode = document.getElementById('p5_invest_mode').value;
+            if(mode === 'risk_focus') {
+                document.getElementById('risk_focus_inputs').style.display = 'block';
+                document.getElementById('return_focus_inputs').style.display = 'none';
+            } else {
+                document.getElementById('risk_focus_inputs').style.display = 'none';
+                document.getElementById('return_focus_inputs').style.display = 'block';
+            }
+        }
+
         // 1. 単利・複利計算
         function calculateInterest() {
             var v0 = parseFloat(document.getElementById('calc1_v0').value);
             var r = parseFloat(document.getElementById('calc1_r').value) / 100;
             var t = parseFloat(document.getElementById('calc1_t').value);
-            
             var single = v0 * (1 + r * t);
             var compound = v0 * Math.pow((1 + r), t);
-            
             document.getElementById('res1_single').innerText = single.toLocaleString(undefined, {maximumFractionDigits: 0});
             document.getElementById('res1_compound').innerText = compound.toLocaleString(undefined, {maximumFractionDigits: 0});
             document.getElementById('result1').style.display = 'block';
@@ -430,27 +368,20 @@
             var r = parseFloat(document.getElementById('calc2_r').value) / 100;
             var t = parseInt(document.getElementById('calc2_t').value);
             
-            var interest_1 = p * r * t;
-            var total_1 = p + interest_1;
-            document.getElementById('res2_1_year').innerHTML = "毎年末利息: " + (p*r).toLocaleString() + " 円<br>最終年末: " + (p + p*r).toLocaleString() + " 円 (元金一括)";
+            var interest_1 = p * r * t; var total_1 = p + interest_1;
+            document.getElementById('res2_1_year').innerHTML = "毎年末利息: " + (p*r).toLocaleString() + " 円<br>最終年: " + (p + p*r).toLocaleString() + " 円";
             document.getElementById('res2_1_interest').innerText = interest_1.toLocaleString() + " 円";
             document.getElementById('res2_1_total').innerText = total_1.toLocaleString() + " 円";
             
-            var principal_per_year = p / t;
-            var total_interest_2 = 0;
-            var first_year_2 = principal_per_year + (p * r);
-            var last_year_2 = principal_per_year + (principal_per_year * r);
-            for(var i=0; i<t; i++) {
-                total_interest_2 += (p - (principal_per_year * i)) * r;
-            }
+            var principal_per_year = p / t; var total_interest_2 = 0;
+            var first_year_2 = principal_per_year + (p * r); var last_year_2 = principal_per_year + (principal_per_year * r);
+            for(var i=0; i<t; i++) { total_interest_2 += (p - (principal_per_year * i)) * r; }
             var total_2 = p + total_interest_2;
-            document.getElementById('res2_2_year').innerHTML = "1年目: " + first_year_2.toLocaleString() + " 円<br>最終年: " + last_year_2.toLocaleString() + " 円 (毎年減少)";
+            document.getElementById('res2_2_year').innerHTML = "1年目: " + first_year_2.toLocaleString() + " 円<br>最終年: " + last_year_2.toLocaleString() + " 円";
             document.getElementById('res2_2_interest').innerText = total_interest_2.toLocaleString() + " 円";
             document.getElementById('res2_2_total').innerText = total_2.toLocaleString() + " 円";
             
-            var y = p * (r / (1 - Math.pow(1 + r, -t)));
-            var total_3 = y * t;
-            var interest_3 = total_3 - p;
+            var y = p * (r / (1 - Math.pow(1 + r, -t))); var total_3 = y * t; var interest_3 = total_3 - p;
             document.getElementById('res2_3_year').innerHTML = "毎年一律: " + Math.round(y).toLocaleString() + " 円";
             document.getElementById('res2_3_interest').innerText = Math.round(interest_3).toLocaleString() + " 円";
             document.getElementById('res2_3_total').innerText = Math.round(total_3).toLocaleString() + " 円";
@@ -460,57 +391,38 @@
 
         // 3. 確率シナリオ
         function calculateScenario() {
-            var p1 = parseFloat(document.getElementById('p1').value) / 100;
-            var r1 = parseFloat(document.getElementById('r1').value);
-            var p2 = parseFloat(document.getElementById('p2').value) / 100;
-            var r2 = parseFloat(document.getElementById('r2').value);
-            var p3 = parseFloat(document.getElementById('p3').value) / 100;
-            var r3 = parseFloat(document.getElementById('r3').value);
-            
-            if(Math.abs((p1 + p2 + p3) - 1.0) > 0.01) {
-                alert("確率の合計が100%になるようにしてください。");
-                return;
-            }
-            
+            var p1 = parseFloat(document.getElementById('p1').value) / 100; var r1 = parseFloat(document.getElementById('r1').value);
+            var p2 = parseFloat(document.getElementById('p2').value) / 100; var r2 = parseFloat(document.getElementById('r2').value);
+            var p3 = parseFloat(document.getElementById('p3').value) / 100; var r3 = parseFloat(document.getElementById('r3').value);
+            if(Math.abs((p1 + p2 + p3) - 1.0) > 0.01) { alert("確率の合計が100%になるようにしてください。"); return; }
             var exp_r = (p1 * r1) + (p2 * r2) + (p3 * r3);
             var variance = (p1 * Math.pow(r1 - exp_r, 2)) + (p2 * Math.pow(r2 - exp_r, 2)) + (p3 * Math.pow(r3 - exp_r, 2));
             var sd = Math.sqrt(variance);
-            
             document.getElementById('res3_return').innerText = exp_r.toFixed(2);
             document.getElementById('res3_variance').innerText = variance.toFixed(2);
             document.getElementById('res3_sd').innerText = sd.toFixed(2);
             document.getElementById('result3').style.display = 'block';
         }
 
-        // 4. 2資産ポートフォリオ (相関係数指定機能つき)
+        // 4. 2資産ポートフォリオ
         function calculatePortfolioNo4() {
-            var mux = parseFloat(document.getElementById('p_mux').value);
-            var sigmax = parseFloat(document.getElementById('p_sigmax').value);
-            var muy = parseFloat(document.getElementById('p_muy').value);
-            var sigmay = parseFloat(document.getElementById('p_sigmay').value);
-            var a = parseFloat(document.getElementById('p_weight').value);
-            var user_rho = parseFloat(document.getElementById('p_rho_user').value);
-            
+            var mux = parseFloat(document.getElementById('p_mux').value); var sigmax = parseFloat(document.getElementById('p_sigmax').value);
+            var muy = parseFloat(document.getElementById('p_muy').value); var sigmay = parseFloat(document.getElementById('p_sigmay').value);
+            var a = parseFloat(document.getElementById('p_weight').value); var user_rho = parseFloat(document.getElementById('p_rho_user').value);
             var p_return = (a * mux) + ((1 - a) * muy);
-            document.getElementById('res4_current_a').innerText = a;
-            document.getElementById('res4_return').innerText = p_return.toFixed(2);
-            
+            document.getElementById('res4_current_a').innerText = a; document.getElementById('res4_return').innerText = p_return.toFixed(2);
             function getSd(rho) {
                 var v = (Math.pow(a,2) * Math.pow(sigmax,2)) + (Math.pow(1-a,2) * Math.pow(sigmay,2)) + (2 * a * (1-a) * rho * sigmax * sigmay);
                 return Math.sqrt(v);
             }
-            
-            document.getElementById('res4_user_rho_val').innerText = user_rho;
-            document.getElementById('res4_user_sd_res').innerText = getSd(user_rho).toFixed(2);
-            
+            document.getElementById('res4_user_rho_val').innerText = user_rho; document.getElementById('res4_user_sd_res').innerText = getSd(user_rho).toFixed(2);
             document.getElementById('res4_rho_0').innerText = getSd(0).toFixed(2) + " %";
             document.getElementById('res4_rho_minus1').innerText = getSd(-1).toFixed(2) + " %";
             document.getElementById('res4_rho_05').innerText = getSd(0.5).toFixed(2) + " %";
-            
             document.getElementById('result4').style.display = 'block';
         }
 
-        // 5. 最適化＆わかりやすい機会曲線描画
+        // 5. 宿題No.5：両重視対応型システム
         var currentChart = null;
         function calculatePortfolioNo5() {
             var mux = parseFloat(document.getElementById('p5_mux').value);
@@ -518,16 +430,13 @@
             var muy = parseFloat(document.getElementById('p5_muy').value);
             var sigmay = parseFloat(document.getElementById('p5_sigmay').value);
             var rho = parseFloat(document.getElementById('p5_rho').value);
-            var t1 = parseFloat(document.getElementById('p5_target1').value);
-            var t2 = parseFloat(document.getElementById('p5_target2').value);
+            var mode = document.getElementById('p5_invest_mode').value;
             
+            // MVPの計算
             var num = Math.pow(sigmay, 2) - (rho * sigmax * sigmay);
             var den = Math.pow(sigmax, 2) + Math.pow(sigmay, 2) - (2 * rho * sigmax * sigmay);
             var mvp_a = num / den;
-            
             document.getElementById('res5_mvp_a').innerText = (mvp_a * 100).toFixed(2);
-            document.getElementById('res5_t1_val').innerText = t1;
-            document.getElementById('res5_t2_val').innerText = t2;
             
             function getReturn(w_a) { return (w_a * mux) + ((1 - w_a) * muy); }
             function getRequiredA(targetRet) { return (targetRet - muy) / (mux - muy); }
@@ -535,123 +444,145 @@
                 var v = (Math.pow(w_a,2)*Math.pow(sigmax,2)) + (Math.pow(1-w_a,2)*Math.pow(sigmay,2)) + (2*w_a*(1-w_a)*rho*sigmax*sigmay);
                 return Math.sqrt(v);
             }
-            
-            var req_a1 = getRequiredA(t1);
-            var req_a2 = getRequiredA(t2);
-            
-            var ans_a1 = (getReturn(mvp_a) >= t1) ? mvp_a : req_a1;
-            var ans_a2 = (getReturn(mvp_a) >= t2) ? mvp_a : req_a2;
-            
-            document.getElementById('res5_ans1').innerText = (ans_a1 * 100).toFixed(2) + "%";
-            document.getElementById('res5_ans2').innerText = (ans_a2 * 100).toFixed(2) + "%";
-            
-            // 選択肢マーク用のテキスト処理
-            function getChoiceLetter(val) {
-                if(Math.abs(val - 0.2857) < 0.01) return "選択肢 B";
-                if(Math.abs(val - 0.50) < 0.01) return "選択肢 C";
-                if(Math.abs(val - 0.1667) < 0.01) return "選択肢 A";
-                return "計算値";
-            }
-            document.getElementById('res5_badge1').innerText = getChoiceLetter(ans_a1);
-            document.getElementById('res5_badge2').innerText = getChoiceLetter(ans_a2);
-            
-            // 機会曲線の全プロット生成
+
+            // 機会曲線の全全1001点プロットを生成して高精度化
             var chartData = [];
-            for (var i = 0; i <= 100; i++) {
-                var a_curr = i / 100;
+            for (var i = 0; i <= 1000; i++) {
+                var a_curr = i / 1000;
                 chartData.push({ x: getSdAtA(a_curr), y: getReturn(a_curr), a: a_curr });
+            }
+
+            var plotPoints = []; // グラフに重ねるマーカー点
+            
+            if (mode === 'risk_focus') {
+                // リスク重視型
+                document.getElementById('res5_risk_box').style.display = 'block';
+                document.getElementById('res5_return_box').style.display = 'none';
+                
+                var t1 = parseFloat(document.getElementById('p5_target1').value);
+                var t2 = parseFloat(document.getElementById('p5_target2').value);
+                document.getElementById('res5_t1_val').innerText = t1;
+                document.getElementById('res5_t2_val').innerText = t2;
+                
+                var ans_a1 = (getReturn(mvp_a) >= t1) ? mvp_a : getRequiredA(t1);
+                var ans_a2 = (getReturn(mvp_a) >= t2) ? mvp_a : getRequiredA(t2);
+                
+                document.getElementById('res5_ans1').innerText = (ans_a1 * 100).toFixed(2) + "%";
+                document.getElementById('res5_ans2').innerText = (ans_a2 * 100).toFixed(2) + "%";
+                
+                function getBadge(val) {
+                    if(Math.abs(val - 0.2857) < 0.01) return "選択肢 B";
+                    if(Math.abs(val - 0.50) < 0.01) return "選択肢 C";
+                    return "計算値";
+                }
+                document.getElementById('res5_badge1').innerText = getBadge(ans_a1);
+                document.getElementById('res5_badge2').innerText = getBadge(ans_a2);
+                
+                plotPoints.push({
+                    label: '■ 条件1 最適解 (リスク最小)',
+                    data: [{ x: getSdAtA(ans_a1), y: getReturn(ans_a1) }],
+                    backgroundColor: '#3182ce', pointStyle: 'rect', pointRadius: 9
+                });
+                plotPoints.push({
+                    label: '◆ 条件2 最適解 (リスク最小)',
+                    data: [{ x: getSdAtA(ans_a2), y: getReturn(ans_a2) }],
+                    backgroundColor: '#805ad5', pointStyle: 'triangle', pointRadius: 10
+                });
+                
+            } else {
+                // 新機能：リターン重視型（リスク上限以下でリターン最大化＝効率的フロンティア上の探索）
+                document.getElementById('res5_risk_box').style.display = 'none';
+                document.getElementById('res5_return_box').style.display = 'block';
+                
+                var r1 = parseFloat(document.getElementById('p5_max_risk1').value);
+                var r2 = parseFloat(document.getElementById('p5_max_risk2').value);
+                document.getElementById('res5_r1_val').innerText = r1;
+                document.getElementById('res5_r2_val').innerText = r2;
+                
+                // リスク上限以下の点で、かつ「リターンが一番高い（上側の枝）」を探す
+                function findMaxReturnA(maxRisk) {
+                    var best_a = null; var max_ret = -999;
+                    for(var i=0; i<chartData.length; i++) {
+                        if(chartData[i].x <= maxRisk) {
+                            if(chartData[i].y > max_ret) {
+                                max_ret = chartData[i].y;
+                                best_a = chartData[i].a;
+                            }
+                        }
+                    }
+                    return best_a;
+                }
+                
+                var ans_ret_a1 = findMaxReturnA(r1);
+                var ans_ret_a2 = findMaxReturnA(r2);
+                
+                if(ans_ret_a1 === null) {
+                    document.getElementById('res5_ret_ans1').innerHTML = "<span style='color:red; font-size:1rem;'>制約を満たすポートフォリオがありません(リスク許容度を上げてください)</span>";
+                } else {
+                    document.getElementById('res5_ret_ans1').innerText = (ans_ret_a1 * 100).toFixed(2) + "% (達成リターン: " + getReturn(ans_ret_a1).toFixed(2) + "%)";
+                    plotPoints.push({
+                        label: '🔥 条件1 最適解 (リターン最大)',
+                        data: [{ x: getSdAtA(ans_ret_a1), y: getReturn(ans_ret_a1) }],
+                        backgroundColor: '#dd6b20', pointStyle: 'rectRot', pointRadius: 9
+                    });
+                }
+                
+                if(ans_ret_a2 === null) {
+                    document.getElementById('res5_ret_ans2').innerHTML = "<span style='color:red; font-size:1rem;'>制約を満たすポートフォリオがありません</span>";
+                } else {
+                    document.getElementById('res5_ret_ans2').innerText = (ans_ret_a2 * 100).toFixed(2) + "% (達成リターン: " + getReturn(ans_ret_a2).toFixed(2) + "%)";
+                    plotPoints.push({
+                        label: '💥 条件2 最適解 (リターン最大)',
+                        data: [{ x: getSdAtA(ans_ret_a2), y: getReturn(ans_ret_a2) }],
+                        backgroundColor: '#e53e3e', pointStyle: 'circle', pointRadius: 9
+                    });
+                }
             }
             
             document.getElementById('result5').style.display = 'block';
             
+            // グラフ描画
             var ctx = document.getElementById('opportunityCurveCanvas').getContext('2d');
             if (currentChart) { currentChart.destroy(); }
             
+            var datasets = [
+                {
+                    label: '機会曲線 (全組み合わせの軌跡)',
+                    data: chartData, showLine: true, borderColor: '#2b6cb0',
+                    backgroundColor: 'rgba(43, 108, 176, 0.02)', borderWidth: 3, pointRadius: 0, order: 3
+                },
+                {
+                    label: '🔴 MVP (最小リスク配合点)',
+                    data: [{ x: getSdAtA(mvp_a), y: getReturn(mvp_a) }],
+                    backgroundColor: '#e53e3e', borderColor: '#fff', borderWidth: 2, pointRadius: 7, order: 1
+                }
+            ];
+            // 算出した最適化プロットを追加
+            plotPoints.forEach(function(ds) {
+                ds.borderColor = '#fff'; ds.borderWidth = 2; ds.order = 2;
+                datasets.push(ds);
+            });
+            
             currentChart = new Chart(ctx, {
                 type: 'scatter',
-                data: {
-                    datasets: [
-                        {
-                            label: '機会曲線（全ポートフォリオの軌跡）',
-                            data: chartData,
-                            showLine: true,
-                            borderColor: '#2b6cb0',
-                            backgroundColor: 'rgba(43, 108, 176, 0.05)',
-                            borderWidth: 3,
-                            pointRadius: 0, // 線を滑らかに見せるため通常点は非表示
-                            order: 3
-                        },
-                        {
-                            label: '🔴 MVP (最小リスク点)',
-                            data: [{ x: getSdAtA(mvp_a), y: getReturn(mvp_a) }],
-                            backgroundColor: '#e53e3e',
-                            borderColor: '#fff',
-                            borderWidth: 2,
-                            pointRadius: 7,
-                            pointHoverRadius: 9,
-                            order: 1
-                        },
-                        {
-                            label: '■ 問1の最適解',
-                            data: [{ x: getSdAtA(ans_a1), y: getReturn(ans_a1) }],
-                            backgroundColor: '#48bb78',
-                            borderColor: '#fff',
-                            borderWidth: 2,
-                            pointStyle: 'rect',
-                            pointRadius: 8,
-                            pointHoverRadius: 10,
-                            order: 2
-                        },
-                        {
-                            label: '◆ 問2の最適解',
-                            data: [{ x: getSdAtA(ans_a2), y: getReturn(ans_a2) }],
-                            backgroundColor: '#9f7aea',
-                            borderColor: '#fff',
-                            borderWidth: 2,
-                            pointStyle: 'triangle',
-                            pointRadius: 9,
-                            pointHoverRadius: 11,
-                            order: 2
-                        }
-                    ]
-                },
+                data: { datasets: datasets },
                 options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
+                    responsive: true, maintainAspectRatio: false,
                     scales: {
-                        x: {
-                            title: { display: true, text: 'ポートフォリオのリスク (標準偏差 σ) %', font: { weight: 'bold' } },
-                            grid: { color: '#e2e8f0' }
-                        },
-                        y: {
-                            title: { display: true, text: 'ポートフォリオの期待収益率 (リターン μ) %', font: { weight: 'bold' } },
-                            grid: { color: '#e2e8f0' }
-                        }
+                        x: { title: { display: true, text: 'リスク (標準偏差 σ) %', font: { weight: 'bold' } } },
+                        y: { title: { display: true, text: '期待収益率 (リターン μ) %', font: { weight: 'bold' } } }
                     },
                     plugins: {
                         tooltip: {
-                            backgroundColor: 'rgba(26, 54, 93, 0.9)',
-                            padding: 12,
-                            titleFont: { size: 14 },
-                            bodyFont: { size: 13 },
                             callbacks: {
                                 label: function(context) {
                                     if(context.datasetIndex === 0) {
-                                        var p = chartData[context.dataIndex];
-                                        return '投資比率a (商品X): ' + (p.a*100).toFixed(0) + '%\nリスク: ' + p.x.toFixed(2) + '%\nリターン: ' + p.y.toFixed(2) + '%';
-                                    } else if(context.datasetIndex === 1) {
-                                        return '【MVP】 最小リスク配合点 (a = ' + (mvp_a*100).toFixed(2) + '%)';
-                                    } else if(context.datasetIndex === 2) {
-                                        return '【問1 最適解】 リターン3%以上の最小リスク点 (a = ' + (ans_a1*100).toFixed(2) + '%)';
-                                    } else if(context.datasetIndex === 3) {
-                                        return '【問2 最適解】 リターン5%以上の最小リスク点 (a = ' + (ans_a2*100).toFixed(2) + '%)';
+                                        var idx = context.dataIndex;
+                                        return '比率a: ' + (chartData[idx].a*100).toFixed(1) + '%, リスク: ' + chartData[idx].x.toFixed(2) + '%, リターン: ' + chartData[idx].y.toFixed(2) + '%';
                                     }
+                                    return context.dataset.label + ' [リスク: ' + context.parsed.x.toFixed(2) + '%, リターン: ' + context.parsed.y.toFixed(2) + '%]';
                                 }
                             }
-                        },
-                        legend: {
-                            position: 'top',
-                            labels: { font: { size: 12, weight: 'bold' }, usePointStyle: true }
                         }
                     }
                 }
